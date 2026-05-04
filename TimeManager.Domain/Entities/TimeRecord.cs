@@ -13,6 +13,9 @@ public class TimeRecord
 	public DateTime Timestamp { get; private set; }
 	public RecordType Type { get; private set; }
 	public string? Note { get; private set; }
+	public bool IsDeleted { get; private set; }
+    public string? AuditJustification { get; private set; }
+    public DateTime? UpdatedAt { get; private set; }
 
 	protected TimeRecord() { }
 
@@ -26,5 +29,26 @@ public class TimeRecord
 		Timestamp = timestamp;
 		Type = type;
 		Note = note;
+		IsDeleted = false;
+	}
+
+	public void MarkAsDeleted(string auditJustification)
+	{
+		if (string.IsNullOrWhiteSpace(auditJustification))
+			throw new ArgumentException("Justification is required");
+
+		IsDeleted = true;
+		AuditJustification = auditJustification;
+		UpdatedAt = DateTime.UtcNow;
+	}
+
+	public void EditTimestamp(DateTime newTimestamp, string auditJustification)
+	{
+		if (string.IsNullOrWhiteSpace(auditJustification))
+			throw new ArgumentException("Justification is required");
+
+		Timestamp = newTimestamp;
+		AuditJustification = auditJustification;
+		UpdatedAt = DateTime.UtcNow;
 	}
 }
