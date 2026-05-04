@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="TimeManager.API/TimeManager.API.csproj" />
+  <Project Path="TimeManager.Application/TimeManager.Application.csproj" />
+  <Project Path="TimeManager.Domain/TimeManager.Domain.csproj" />
+  <Project Path="TimeManager.Infrastructure/TimeManager.Infrastructure.csproj" />
+</Solution>
