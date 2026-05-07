@@ -26,7 +26,7 @@ public class TimeRecordRepository(AppDbContext context) : ITimeRecordRepository
 	public async Task<TimeRecord?> GetByIdAsync(Guid id)
 	{
 		return await context.TimeRecords
-			.Where(r => r.Id == id)
+			.Where(r => r.Id == id && !r.IsDeleted)
 			.FirstOrDefaultAsync();
 	}
 
@@ -35,4 +35,12 @@ public class TimeRecordRepository(AppDbContext context) : ITimeRecordRepository
         context.TimeRecords.Update(record);
         await context.SaveChangesAsync();
     }
+
+	public async Task<bool> ExistsPunchAtAsync(Guid userId, DateTime timestamp)
+	{
+		return await context.TimeRecords
+			.AnyAsync(t => t.UserId == userId 
+						&& !t.IsDeleted 
+						&& t.Timestamp == timestamp);
+	}
 }

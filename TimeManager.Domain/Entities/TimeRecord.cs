@@ -44,6 +44,9 @@ public class TimeRecord
 
 	public void UpdateDetails(DateTime newTimestamp, RecordType newType, string auditJustification)
 	{
+		if (IsDeleted)
+			throw new InvalidOperationException("Não é possível alterar um registro apagado.");
+			
 		if (string.IsNullOrWhiteSpace(auditJustification))
 			throw new ArgumentException("Justification is required");
 

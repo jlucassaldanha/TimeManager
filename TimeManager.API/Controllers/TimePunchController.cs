@@ -27,7 +27,7 @@ public class TimePunchController(
 	}
 
 	[HttpPost("manual")]
-	public async Task<IActionResult> RegisterRealTimePunch([FromBody] ManualOrUpdatePunchRequest request)
+	public async Task<IActionResult> RegisterRealTimePunch([FromBody] ManualPunchRequest request)
 	{
 		try
 		{
@@ -41,11 +41,11 @@ public class TimePunchController(
 	}
 
 	[HttpPost("update")]
-	public async Task<IActionResult> UpdatePunch([FromBody] ManualOrUpdatePunchRequest request)
+	public async Task<IActionResult> UpdatePunch([FromBody] UpdatePunchRequest request)
 	{
 		try
 		{
-			await updateUseCase.ExecuteAsync(request.UserId, request.DateTime, request.Type, request.Note);
+			await updateUseCase.ExecuteAsync(request.UserId, request.RecordId, request.DateTime, request.Type, request.Note);
 			return Ok(new { Message = "Ponto atualizado com sucesso."});
 		}
 		catch (ArgumentException ex)

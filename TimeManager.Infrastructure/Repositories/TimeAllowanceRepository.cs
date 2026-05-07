@@ -7,7 +7,7 @@ namespace TimeManager.Infrastructure.Repositories;
 
 public class TimeAllowanceRepository(AppDbContext context) : ITimeAllowanceRepository
 {
-    public async Task<TimeAllowance?> GetValidAllowanceAsync(Guid userId, DateTime date)
+    public async Task<TimeAllowance?> GetByUserIdAndDateAllowanceAsync(Guid userId, DateTime date)
     {
         return await context.TimeAllowances
             .FirstOrDefaultAsync(a => a.UserId == userId && a.Date.Date == date.Date);

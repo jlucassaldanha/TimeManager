@@ -4,7 +4,7 @@ namespace TimeManager.Domain.Interfaces;
 
 public interface ITimeAllowanceRepository
 {
-	Task<TimeAllowance?> GetValidAllowanceAsync(Guid userId, DateTime date);
+	Task<TimeAllowance?> GetByUserIdAndDateAllowanceAsync(Guid userId, DateTime date);
 	Task AddAsync(TimeAllowance allowance);
     Task UpdateAsync(TimeAllowance allowance);
 }
