@@ -10,21 +10,16 @@ public class GetDailySummaryUseCase(
         IWorkJourneyRuleRepository ruleRepository,
         DailyHoursCalculator calculator)
 {
-	private readonly ITimeRecordRepository _recordRepository = recordRepository;
-    private readonly ITimeAllowanceRepository _allowanceRepository = allowanceRepository;
-    private readonly IWorkJourneyRuleRepository _ruleRepository = ruleRepository;
-    private readonly DailyHoursCalculator _calculator = calculator;
-
 	public async Task<DailySummaryDto> ExecuteAsync(Guid userId, DateTime date)
 	{
-		var records = await _recordRepository.GetRecordsByUserIdAndDateAsync(userId, date);
-		var allowance = await _allowanceRepository.GetValidAllowanceAsync(userId, date);
-		var journeyRule = await _ruleRepository.GetByUserIdAsync(userId);
+		var records = await recordRepository.GetRecordsByUserIdAndDateAsync(userId, date);
+		var allowance = await allowanceRepository.GetValidAllowanceAsync(userId, date);
+		var journeyRule = await ruleRepository.GetByUserIdAsync(userId);
 
 		if (journeyRule == null)
 			throw new InvalidOperationException("User need journey rules");
 
-		var workedHours = _calculator.Calculate(records);
+		var workedHours = calculator.Calculate(records);
 		var allowedHours = allowance?.HoursAllowed ?? TimeSpan.Zero;
 		var totalAccountedHours = workedHours + allowedHours;
 

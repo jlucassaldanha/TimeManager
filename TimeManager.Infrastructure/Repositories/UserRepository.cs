@@ -7,16 +7,14 @@ namespace TimeManager.Infrastructure.Repositories;
 
 public class UserRepository(AppDbContext context) : IUserRepository
 {
-	private readonly AppDbContext _context = context;
-
 	public async Task AddAsync(User user)
 	{
-		await _context.Users.AddAsync(user);
-		await _context.SaveChangesAsync();
+		await context.Users.AddAsync(user);
+		await context.SaveChangesAsync();
 	}
 
 	public async Task<bool> ExistsByEmailAsync(string email)
 	{
-		return await _context.Users.AnyAsync(u => u.Email == email);
+		return await context.Users.AnyAsync(u => u.Email == email);
 	}
 }

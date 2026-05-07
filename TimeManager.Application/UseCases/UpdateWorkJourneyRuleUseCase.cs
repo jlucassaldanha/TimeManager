@@ -3,12 +3,16 @@ using TimeManager.Domain.Interfaces;
 
 namespace TimeManager.Application.UseCases;
 
-public class CreateWorkJourneyRuleUseCase(IWorkJourneyRuleRepository repository)
+public class UpdateWorkJourneyRuleUseCase(IWorkJourneyRuleRepository repository)
 {
 	public async Task ExecuteAsync(Guid userId, Dictionary<DayOfWeek, TimeSpan> goals)
 	{
-		var rule = new WorkJourneyRule(
-			userId,
+		var existingRule = await repository.GetByUserIdAsync(userId);
+
+		if (existingRule == null)
+            throw new InvalidOperationException("Regra não encontrada.");
+
+		existingRule.UpdateDetails(
 			goals.GetValueOrDefault(DayOfWeek.Monday, TimeSpan.Zero),
 			goals.GetValueOrDefault(DayOfWeek.Tuesday, TimeSpan.Zero),
             goals.GetValueOrDefault(DayOfWeek.Wednesday, TimeSpan.Zero),
@@ -18,6 +22,6 @@ public class CreateWorkJourneyRuleUseCase(IWorkJourneyRuleRepository repository)
             goals.GetValueOrDefault(DayOfWeek.Sunday, TimeSpan.Zero)
 		);
 
-		await repository.AddAsync(rule);
+		await repository.UpdateAsync(existingRule);
 	}
 }

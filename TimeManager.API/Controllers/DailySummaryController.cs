@@ -5,10 +5,8 @@ namespace TimeManager.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DailySummaryUseCase(GetDailySummaryUseCase getDailySummaryUseCase) : ControllerBase
+public class DailySummaryUseCase(GetDailySummaryUseCase useCase) : ControllerBase
 {
-	private readonly GetDailySummaryUseCase _getDailySummaryUseCase = getDailySummaryUseCase;
-
 	[HttpGet("{userId}/{date}")]
 	public async Task<IActionResult> GetSummary(Guid userId, DateTime date)
 	{
@@ -16,7 +14,7 @@ public class DailySummaryUseCase(GetDailySummaryUseCase getDailySummaryUseCase) 
 		{
 			var utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
 
-			var summary = await _getDailySummaryUseCase.ExecuteAsync(userId, utcDate);
+			var summary = await useCase.ExecuteAsync(userId, utcDate);
 
 			if (summary == null)
 				return NotFound(new { Message = "Nenhum registro encontrado"});

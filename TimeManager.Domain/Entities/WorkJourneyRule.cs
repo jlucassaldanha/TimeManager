@@ -49,4 +49,17 @@ public class WorkJourneyRule
 		var dailyGoal = GetGoalForDate(date);
 		return totalWorked - dailyGoal;
 	}
+
+    public void UpdateDetails(
+        TimeSpan monday, TimeSpan tuesday, TimeSpan wednesday, 
+        TimeSpan thursday, TimeSpan friday, TimeSpan saturday, TimeSpan sunday)
+    {
+        MondayGoal = monday;
+        TuesdayGoal = tuesday;
+        WednesdayGoal = wednesday;
+        ThursdayGoal = thursday;
+        FridayGoal = friday;
+        SaturdayGoal = saturday;
+        SundayGoal = sunday;
+    }
 }

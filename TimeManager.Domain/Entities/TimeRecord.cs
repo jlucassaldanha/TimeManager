@@ -42,13 +42,15 @@ public class TimeRecord
 		UpdatedAt = DateTime.UtcNow;
 	}
 
-	public void EditTimestamp(DateTime newTimestamp, string auditJustification)
+	public void UpdateDetails(DateTime newTimestamp, RecordType newType, string auditJustification)
 	{
 		if (string.IsNullOrWhiteSpace(auditJustification))
 			throw new ArgumentException("Justification is required");
 
 		Timestamp = newTimestamp;
+		Type = newType;
 		AuditJustification = auditJustification;
+		Note = auditJustification;
 		UpdatedAt = DateTime.UtcNow;
 	}
 }

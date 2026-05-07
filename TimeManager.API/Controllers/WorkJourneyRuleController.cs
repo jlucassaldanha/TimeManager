@@ -8,8 +8,6 @@ namespace TimeManager.API.Controllers;
 [Route("api/[controller]")]
 public class WorkJourneyRuleController(CreateWorkJourneyRuleUseCase useCase) : ControllerBase
 {
-    private readonly CreateWorkJourneyRuleUseCase _useCase = useCase;
-
     [HttpPost]
 	public async Task<IActionResult> Create([FromBody] CreateWorkJourneyRuleRequest request)
 	{
@@ -24,7 +22,7 @@ public class WorkJourneyRuleController(CreateWorkJourneyRuleUseCase useCase) : C
             { DayOfWeek.Sunday, TimeSpan.Parse(request.Sunday) }
 		};
 
-		await _useCase.ExecuteAsync(request.UserId, goals);
+		await useCase.ExecuteAsync(request.UserId, goals);
 		return Ok(new { Message = "Regra de jornada registrada com sucesso"});
 	}
 }
