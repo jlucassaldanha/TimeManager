@@ -13,7 +13,7 @@ public class GetDailySummaryUseCase(
 	public async Task<DailySummaryDto> ExecuteAsync(Guid userId, DateTime date)
 	{
 		var records = await recordRepository.GetRecordsByUserIdAndDateAsync(userId, date);
-		var allowance = await allowanceRepository.GetValidAllowanceAsync(userId, date);
+		var allowance = await allowanceRepository.GetByUserIdAndDateAllowanceAsync(userId, date);
 		var journeyRule = await ruleRepository.GetByUserIdAsync(userId);
 
 		if (journeyRule == null)

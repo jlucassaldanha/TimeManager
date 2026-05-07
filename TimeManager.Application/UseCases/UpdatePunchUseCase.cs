@@ -5,7 +5,7 @@ namespace TimeManager.Application.UseCases;
 
 public class UpdatePunchUseCase(ITimeRecordRepository repository)
 {
-	public async Task ExecuteAsync(Guid userId, Guid recordId, DateTime newDateTime, RecordType newType, string newNote)
+	public async Task ExecuteAsync(Guid userId, Guid recordId, DateTime newDateTime, string newType, string newNote)
 	{
 		var existingRecord = await repository.GetByIdAsync(recordId);
 
@@ -16,7 +16,10 @@ public class UpdatePunchUseCase(ITimeRecordRepository repository)
         if (isDuplicate)
             throw new InvalidOperationException("Já existe um ponto registrado exatamente neste horário.");
 
-		existingRecord.UpdateDetails(newDateTime, newType, newNote);
+		if (!Enum.TryParse(newType, out RecordType newTypeEnum))
+			throw new InvalidOperationException("Tipo de ponto invalido");
+
+		existingRecord.UpdateDetails(newDateTime, newTypeEnum, newNote);
 		await repository.UpdateAsync(existingRecord);
 	}
 }
