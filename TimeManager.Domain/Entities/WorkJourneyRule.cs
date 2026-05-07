@@ -1,4 +1,4 @@
-namespace TimeManager.DOmain.Entities;
+namespace TimeManager.Domain.Entities;
 
 public class WorkJourneyRule
 {
