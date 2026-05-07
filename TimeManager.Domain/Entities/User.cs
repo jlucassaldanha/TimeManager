@@ -3,11 +3,15 @@ namespace TimeManager.Domain.Entities;
 public class User
 {
 	public Guid Id { get; private set; }
-	public required string Name { get; set; }
-	public required string Email { get; set; }
+	public string Name { get; private set; }
+	public string Email { get; private set; }
 	public bool IsActive { get; private set; }
 
-	protected User() { }
+	protected User()
+	{
+		Name = null!;
+		Email = null!;
+	}
 
 	public User(string name, string email)
 	{

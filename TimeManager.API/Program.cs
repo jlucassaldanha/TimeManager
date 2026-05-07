@@ -13,11 +13,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ITimeRecordRepository, TimeRecordRepository>();
 builder.Services.AddScoped<ITimeAllowanceRepository, TimeAllowanceRepository>();
 builder.Services.AddScoped<IWorkJourneyRuleRepository, WorkJourneyRuleRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<DailyHoursCalculator>();
 
 builder.Services.AddScoped<GetDailySummaryUseCase>();
 builder.Services.AddScoped<RegisterRealTimePunchUseCase>();
+builder.Services.AddScoped<CreateUserUseCase>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -6,12 +6,15 @@ public class TimeAllowance
     public Guid UserId { get; private set; }
     public DateTime Date { get; private set; }
 	public TimeSpan HoursAllowed { get; private set; }
-    public required string Justification { get; set; }
+    public string Justification { get; private set; }
 	public bool IsDeleted { get; private set; }
     public string? AuditJustification { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
 
-    protected TimeAllowance() { }
+    protected TimeAllowance()
+	{
+		Justification = null!;
+	}
 	public TimeAllowance(Guid userId, DateTime date, TimeSpan hoursAllowed, string justification)
 	{
 		if (userId == Guid.Empty) 
