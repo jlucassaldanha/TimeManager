@@ -1,6 +1,6 @@
 namespace TimeManager.API.DTOs;
 
-public class CreateWorkJourneyRuleRequest
+public class CreateOrUpdateWorkJourneyRuleRequest
 {
     public Guid UserId { get; set; }
     public string Monday { get; set; } = "08:00:00";
