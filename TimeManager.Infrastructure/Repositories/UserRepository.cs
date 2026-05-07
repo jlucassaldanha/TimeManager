@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TimeManager.Domain.Entities;
 using TimeManager.Domain.Interfaces;
 using TimeManager.Infrastructure.Data;
@@ -12,5 +13,10 @@ public class UserRepository(AppDbContext context) : IUserRepository
 	{
 		await _context.Users.AddAsync(user);
 		await _context.SaveChangesAsync();
+	}
+
+	public async Task<bool> ExistsByEmailAsync(string email)
+	{
+		return await _context.Users.AnyAsync(u => u.Email == email);
 	}
 }

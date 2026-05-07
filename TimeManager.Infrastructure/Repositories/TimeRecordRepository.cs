@@ -21,6 +21,7 @@ public class TimeRecordRepository(AppDbContext context) : ITimeRecordRepository
 			.Where(r => r.UserId == userId
 					&& r.Timestamp.Date == date.Date
 					&& !r.IsDeleted)
+			.OrderBy(t => t.Timestamp)
 			.ToListAsync();
 	}
 }

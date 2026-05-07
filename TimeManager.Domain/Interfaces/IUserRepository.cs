@@ -5,4 +5,5 @@ namespace TimeManager.Domain.Interfaces;
 public interface IUserRepository
 {
 	Task AddAsync(User user);
+	Task<bool> ExistsByEmailAsync(string email);
 }

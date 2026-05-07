@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TimeManager.API.DTOs;
 using TimeManager.Application.UseCases;
 
 namespace TimeManager.API.Controllers;
@@ -17,15 +18,13 @@ public class UserController(CreateUserUseCase createUserUseCase) : ControllerBas
 			var userId = await _createUserUseCase.ExecuteAsync(request.Name, request.Email);
 			return Ok(new { Message = "Usuário criado!", UserId = userId });
 		}
+		catch (InvalidOperationException ex)
+		{
+			return BadRequest(new { Error = ex.Message} );
+		}
 		catch (ArgumentException ex)
 		{
 			return BadRequest(new { Error = ex.Message });
 		}
 	}
-}
-
-public class CreateUserRequest
-{
-	public required string Name { get; set; }
-	public required string Email { get; set; }
 }

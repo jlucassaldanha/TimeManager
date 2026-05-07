@@ -12,7 +12,7 @@ public class RegisterRealTimePunchUseCase(ITimeRecordRepository repository)
 		var now = DateTime.UtcNow;
 
 		var todayRecords = await _repository.GetRecordsByUserIdAndDateAsync(userId, now.Date);
-		var lastRecord = todayRecords.OrderBy(r => r.Timestamp).FirstOrDefault();
+		var lastRecord = todayRecords.LastOrDefault();
 
 		var nextType = (lastRecord == null || lastRecord.Type == RecordType.Exit) 
 			? RecordType.Entry
