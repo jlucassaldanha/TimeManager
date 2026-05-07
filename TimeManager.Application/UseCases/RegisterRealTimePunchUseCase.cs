@@ -3,10 +3,14 @@ using TimeManager.Domain.Interfaces;
 
 namespace TimeManager.Application.UseCases;
 
-public class RegisterRealTimePunchUseCase(ITimeRecordRepository repository)
+public class RegisterRealTimePunchUseCase(ITimeRecordRepository repository, IUserRepository userRepository)
 {
 	public async Task ExecuteAsync(Guid userId)
 	{
+		var userExists = await userRepository.ExistsByIdAsync(userId);
+		if (userExists)
+			throw new InvalidOperationException("Usuário não encontrado.");
+
 		var now = DateTime.UtcNow;
 
 		var todayRecords = await repository.GetRecordsByUserIdAndDateAsync(userId, now.Date);

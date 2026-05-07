@@ -1,12 +1,15 @@
-using TimeManager.Domain.Entities;
 using TimeManager.Domain.Interfaces;
 
 namespace TimeManager.Application.UseCases;
 
-public class UpdateWorkJourneyRuleUseCase(IWorkJourneyRuleRepository repository)
+public class UpdateWorkJourneyRuleUseCase(IWorkJourneyRuleRepository repository, IUserRepository userRepository)
 {
 	public async Task ExecuteAsync(Guid userId, Dictionary<DayOfWeek, TimeSpan> goals)
 	{
+		var userExists = await userRepository.ExistsByIdAsync(userId);
+		if (userExists)
+			throw new InvalidOperationException("Usuário não encontrado.");
+
 		var existingRule = await repository.GetByUserIdAsync(userId);
 
 		if (existingRule == null)

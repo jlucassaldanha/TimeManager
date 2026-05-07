@@ -3,10 +3,14 @@ using TimeManager.Domain.Interfaces;
 
 namespace TimeManager.Application.UseCases;
 
-public class UpdatePunchUseCase(ITimeRecordRepository repository)
+public class UpdatePunchUseCase(ITimeRecordRepository repository, IUserRepository userRepository)
 {
 	public async Task ExecuteAsync(Guid userId, Guid recordId, DateTime newDateTime, string newType, string newNote)
 	{
+		var userExists = await userRepository.ExistsByIdAsync(userId);
+		if (userExists)
+			throw new InvalidOperationException("Usuário não encontrado.");
+
 		var existingRecord = await repository.GetByIdAsync(recordId);
 
 		if (existingRecord == null)

@@ -8,10 +8,15 @@ public class GetDailySummaryUseCase(
         ITimeRecordRepository recordRepository,
         ITimeAllowanceRepository allowanceRepository,
         IWorkJourneyRuleRepository ruleRepository,
+		IUserRepository userRepository,
         DailyHoursCalculator calculator)
 {
 	public async Task<DailySummaryDto> ExecuteAsync(Guid userId, DateTime date)
 	{
+		var userExists = await userRepository.ExistsByIdAsync(userId);
+		if (userExists)
+			throw new InvalidOperationException("Usuário não encontrado.");
+
 		var records = await recordRepository.GetRecordsByUserIdAndDateAsync(userId, date);
 		var allowance = await allowanceRepository.GetByUserIdAndDateAllowanceAsync(userId, date);
 		var journeyRule = await ruleRepository.GetByUserIdAsync(userId);
