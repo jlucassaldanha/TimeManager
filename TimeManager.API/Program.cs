@@ -25,6 +25,8 @@ builder.Services.AddScoped<CreateWorkJourneyRuleUseCase>();
 builder.Services.AddScoped<UpdatePunchUseCase>();
 builder.Services.AddScoped<UpdateWorkJourneyRuleUseCase>();
 builder.Services.AddScoped<DeletePunchUseCase>();
+builder.Services.AddScoped<GetAllowanceEligibilityUseCase>();
+builder.Services.AddScoped<CreateAllowanceUseCase>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
