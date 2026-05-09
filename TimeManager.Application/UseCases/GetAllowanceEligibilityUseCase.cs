@@ -25,7 +25,7 @@ public class GetAllowanceEligibilityUseCase(
 			var dailyGoal = rule.GetGoalForDate(currentDate);
 
 			var dayRecords = await recordRepository.GetRecordsByUserIdAndDateAsync(userId, currentDate);
-			var totalWorkedHours = calculator.Calculate(dayRecords);
+			var totalWorkedHours = calculator.CalculateWorkedHours(dayRecords);
 
 			var dayDto = new AllowanceEligibilityDayDto { Date = currentDate };
 

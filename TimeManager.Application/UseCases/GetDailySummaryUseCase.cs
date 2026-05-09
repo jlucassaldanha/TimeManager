@@ -8,28 +8,26 @@ public class GetDailySummaryUseCase(
         ITimeRecordRepository recordRepository,
         ITimeAllowanceRepository allowanceRepository,
         IWorkJourneyRuleRepository ruleRepository,
-		IUserRepository userRepository,
         DailyHoursCalculator calculator)
 {
-	public async Task<DailySummaryDto> ExecuteAsync(Guid userId, DateTime date)
+	public async Task<DailySummaryDto?> ExecuteAsync(Guid userId, DateTime date)
 	{
-		var userExists = await userRepository.ExistsByIdAsync(userId);
-		if (userExists)
-			throw new InvalidOperationException("Usuário não encontrado.");
-
 		var records = await recordRepository.GetRecordsByUserIdAndDateAsync(userId, date);
-		var allowance = await allowanceRepository.GetByUserIdAndDateAllowanceAsync(userId, date);
+		var allowances = await allowanceRepository.GetByUserIdAndDateAllowanceAsync(userId, date);
 		var journeyRule = await ruleRepository.GetByUserIdAsync(userId);
+
+		if (!records.Any() && !allowances.Any()) return null;
 
 		if (journeyRule == null)
 			throw new InvalidOperationException("User need journey rules");
-
-		var workedHours = calculator.Calculate(records);
-		var allowedHours = allowance?.HoursAllowed ?? TimeSpan.Zero;
-		var totalAccountedHours = workedHours + allowedHours;
-
-		var balance = journeyRule.CalculateBalance(date, totalAccountedHours);
+			
 		var dailyGoal = journeyRule.GetGoalForDate(date);
+
+		var workedHours = calculator.CalculateWorkedHours(records);
+		var allowedHours = calculator.CalculateEffectiveAllowedHours(workedHours, dailyGoal,allowances);
+		
+		var totalAccountedHours = workedHours + allowedHours;
+		var balance = journeyRule.CalculateBalance(date, totalAccountedHours);
 
 		var punches = records.Select(r => new TimePunchDto(
 			Id: r.Id,
