@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using TimeManager.API.DTOs;
+using TimeManager.Application.DTOs;
 using TimeManager.Application.UseCases;
 
 namespace TimeManager.API.Controllers;

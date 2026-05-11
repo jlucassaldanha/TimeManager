@@ -1,7 +1,7 @@
 namespace TimeManager.Application.DTOs;
 
 public record DailySummaryDto(
-	DateTime Date,
+	DateOnly Date,
 	TimeSpan WorkedHours,
 	TimeSpan AllowedHours,
 	TimeSpan TotalHours,

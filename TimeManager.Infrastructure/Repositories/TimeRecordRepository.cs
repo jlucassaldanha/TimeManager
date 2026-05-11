@@ -23,6 +23,16 @@ public class TimeRecordRepository(AppDbContext context) : ITimeRecordRepository
 			.ToListAsync();
 	}
 
+	public async Task<IEnumerable<TimeRecord>> GetByUserIdAndPeriodAsync(Guid userId, DateTime startDate, DateTime endDate)
+    {
+        return await context.TimeRecords
+            .Where(a => a.UserId == userId 
+                    && a.Timestamp >= startDate 
+                    && a.Timestamp <= endDate)
+            .OrderBy(a => a.Timestamp)
+            .ToListAsync();
+    }
+
 	public async Task<TimeRecord?> GetByIdAsync(Guid id)
 	{
 		return await context.TimeRecords

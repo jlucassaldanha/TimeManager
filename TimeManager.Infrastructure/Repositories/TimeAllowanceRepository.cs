@@ -15,6 +15,16 @@ public class TimeAllowanceRepository(AppDbContext context) : ITimeAllowanceRepos
                     && a.Date == date)
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<TimeAllowance>> GetByUserIdAndPeriodAsync(Guid userId, DateOnly startDate, DateOnly endDate)
+    {
+        return await context.TimeAllowances
+            .Where(a => a.UserId == userId 
+                    && a.Date >= startDate 
+                    && a.Date <= endDate)
+            .OrderBy(a => a.Date)
+            .ToListAsync();
+    }
     
     public async Task AddAsync(TimeAllowance allowance)
     {

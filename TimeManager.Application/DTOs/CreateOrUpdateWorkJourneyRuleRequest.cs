@@ -1,4 +1,4 @@
-namespace TimeManager.API.DTOs;
+namespace TimeManager.Application.DTOs;
 
 public class CreateOrUpdateWorkJourneyRuleRequest
 {

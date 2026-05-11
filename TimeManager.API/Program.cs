@@ -19,6 +19,7 @@ builder.Services.AddScoped<DailyHoursCalculator>();
 builder.Services.AddScoped<AllowanceService>();
 
 builder.Services.AddScoped<GetDailySummaryUseCase>();
+builder.Services.AddScoped<GetPeriodSummaryUseCase>();
 builder.Services.AddScoped<RegisterRealTimePunchUseCase>();
 builder.Services.AddScoped<RegisterManualPunchUseCase>();
 builder.Services.AddScoped<CreateUserUseCase>();

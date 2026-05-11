@@ -1,6 +1,4 @@
-using TimeManager.Domain.Entities;
-
-namespace TimeManager.API.DTOs;
+namespace TimeManager.Application.DTOs;
 
 public class ManualPunchRequest {
 	public required Guid UserId { get; set;} 
