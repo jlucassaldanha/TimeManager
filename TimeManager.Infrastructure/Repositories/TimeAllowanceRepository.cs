@@ -7,10 +7,12 @@ namespace TimeManager.Infrastructure.Repositories;
 
 public class TimeAllowanceRepository(AppDbContext context) : ITimeAllowanceRepository
 {
-    public async Task<IEnumerable<TimeAllowance>> GetByUserIdAndDateAllowanceAsync(Guid userId, DateTime date)
+    public async Task<IEnumerable<TimeAllowance>> GetByUserIdAndDateAllowanceAsync(Guid userId, DateOnly date)
     {
         return await context.TimeAllowances
-            .Where(a => a.UserId == userId && a.Date.Date == date.Date && a.IsDeleted == false)
+            .Where(a => a.UserId == userId 
+                    && !a.IsDeleted 
+                    && a.Date == date)
             .ToListAsync();
     }
     

@@ -19,7 +19,7 @@ public class TimeAllowanceConfiguration : IEntityTypeConfiguration<TimeAllowance
 		builder.Property(t => t.AuditJustification)
 			.HasMaxLength(500);
 
-		builder.HasQueryFilter(t => t.IsDeleted);
+		builder.HasQueryFilter(t => !t.IsDeleted);
 
 		builder.HasOne<User>()
 			.WithMany()

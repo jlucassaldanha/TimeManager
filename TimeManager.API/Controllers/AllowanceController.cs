@@ -23,7 +23,7 @@ public class AllowanceController(
 			return BadRequest(new { Error = ex.Message });
 		}
 	}
-
+	// Atualizar
 	[HttpGet("eligibility/{userId}")]
 	public async Task<IActionResult> GetEligibility(Guid userId, [FromQuery] int year, [FromQuery] int month)
 	{

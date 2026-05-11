@@ -4,7 +4,7 @@ namespace TimeManager.Domain.Services;
 
 public class AllowanceService
 {
-	public void ValidateAllowanceRequest(DateTime allowanceDate, TimeSpan requestDuration, TimeSpan dailyGoal)
+	public void ValidateAllowanceRequest(TimeSpan requestDuration, TimeSpan dailyGoal)
 	{
 		if (dailyGoal == TimeSpan.Zero)
 			throw new InvalidOperationException("O usuario não possui carga horaria para abonar.");
@@ -18,6 +18,6 @@ public class AllowanceService
 		if (totalWorkedHours >= dailyGoal) return TimeSpan.Zero;
 
 		var missingHours = dailyGoal - totalWorkedHours;
-		return totalAllowanceClaimed < missingHours ? totalAllowanceClaimed : missingHours;
+		return totalAllowanceClaimed <= missingHours ? totalAllowanceClaimed : missingHours;
 	}
 }

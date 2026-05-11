@@ -9,7 +9,7 @@ public class CreateAllowanceUseCase(
 	IWorkJourneyRuleRepository ruleRepository,
 	AllowanceService allowanceService)
 {
-	public async Task ExecuteAsync(Guid userId, DateTime date, TimeSpan duration, string justification)
+	public async Task ExecuteAsync(Guid userId, DateOnly date, TimeSpan duration, string justification)
 	{
 		var rule = await ruleRepository.GetByUserIdAsync(userId);
 		if (rule == null)
@@ -17,7 +17,7 @@ public class CreateAllowanceUseCase(
 
 		var dailyGoal = rule.GetGoalForDate(date);
 
-		allowanceService.ValidateAllowanceRequest(date, duration, dailyGoal);
+		allowanceService.ValidateAllowanceRequest(duration, dailyGoal);
 
 		var allowance = new TimeAllowance(userId, date, duration, justification);
 		await allowanceRepository.AddAsync(allowance);

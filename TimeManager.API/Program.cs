@@ -16,6 +16,7 @@ builder.Services.AddScoped<IWorkJourneyRuleRepository, WorkJourneyRuleRepository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<DailyHoursCalculator>();
+builder.Services.AddScoped<AllowanceService>();
 
 builder.Services.AddScoped<GetDailySummaryUseCase>();
 builder.Services.AddScoped<RegisterRealTimePunchUseCase>();

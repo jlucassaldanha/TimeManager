@@ -8,7 +8,7 @@ namespace TimeManager.API.Controllers;
 [Route("api/[controller]")]
 public class UserController(CreateUserUseCase useCase) : ControllerBase
 {
-	[HttpPost]
+	[HttpPost("create")]
 	public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
 	{	
 		try

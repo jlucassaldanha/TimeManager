@@ -29,7 +29,7 @@ public class WorkJourneyRule
         SundayGoal = sunday;
     }
 
-	public TimeSpan GetGoalForDate(DateTime date)
+	public TimeSpan GetGoalForDate(DateOnly date)
 	{
 		return date.DayOfWeek switch
 		{
@@ -44,7 +44,7 @@ public class WorkJourneyRule
 		};
 	}
 
-	public TimeSpan CalculateBalance(DateTime date, TimeSpan totalWorked)
+	public TimeSpan CalculateBalance(DateOnly date, TimeSpan totalWorked)
 	{
 		var dailyGoal = GetGoalForDate(date);
 		return totalWorked - dailyGoal;

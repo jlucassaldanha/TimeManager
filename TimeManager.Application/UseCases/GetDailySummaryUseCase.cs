@@ -13,7 +13,7 @@ public class GetDailySummaryUseCase(
 	public async Task<DailySummaryDto?> ExecuteAsync(Guid userId, DateTime date)
 	{
 		var records = await recordRepository.GetRecordsByUserIdAndDateAsync(userId, date);
-		var allowances = await allowanceRepository.GetByUserIdAndDateAllowanceAsync(userId, date);
+		var allowances = await allowanceRepository.GetByUserIdAndDateAllowanceAsync(userId, DateOnly.FromDateTime(date));
 		var journeyRule = await ruleRepository.GetByUserIdAsync(userId);
 
 		if (!records.Any() && !allowances.Any()) return null;
@@ -21,13 +21,13 @@ public class GetDailySummaryUseCase(
 		if (journeyRule == null)
 			throw new InvalidOperationException("User need journey rules");
 			
-		var dailyGoal = journeyRule.GetGoalForDate(date);
+		var dailyGoal = journeyRule.GetGoalForDate(DateOnly.FromDateTime(date));
 
 		var workedHours = calculator.CalculateWorkedHours(records);
-		var allowedHours = calculator.CalculateEffectiveAllowedHours(workedHours, dailyGoal,allowances);
+		var allowedHours = calculator.CalculateEffectiveAllowedHours(workedHours, dailyGoal, allowances);
 		
 		var totalAccountedHours = workedHours + allowedHours;
-		var balance = journeyRule.CalculateBalance(date, totalAccountedHours);
+		var balance = journeyRule.CalculateBalance(DateOnly.FromDateTime(date), totalAccountedHours);
 
 		var punches = records.Select(r => new TimePunchDto(
 			Id: r.Id,

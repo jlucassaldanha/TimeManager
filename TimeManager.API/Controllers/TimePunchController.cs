@@ -38,6 +38,10 @@ public class TimePunchController(
 		{
 			return BadRequest(new { Error = ex.Message });
 		}
+		catch (InvalidOperationException ex)
+		{
+			return BadRequest(new { Error = ex.Message });
+		}
 	}
 
 	[HttpPost("update")]

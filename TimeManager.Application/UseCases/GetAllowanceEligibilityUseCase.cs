@@ -17,12 +17,11 @@ public class GetAllowanceEligibilityUseCase(
 		if (rule == null) return result;
 
 		var daysInMonth = DateTime.DaysInMonth(year, month);
-		var today = DateTime.UtcNow.Date;
-
+		
 		for (int day = 1; day <= daysInMonth; day++)
 		{
 			var currentDate = new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
-			var dailyGoal = rule.GetGoalForDate(currentDate);
+			var dailyGoal = rule.GetGoalForDate(DateOnly.FromDateTime(currentDate));
 
 			var dayRecords = await recordRepository.GetRecordsByUserIdAndDateAsync(userId, currentDate);
 			var totalWorkedHours = calculator.CalculateWorkedHours(dayRecords);

@@ -20,7 +20,7 @@ public class DailyHoursCalculator
         if (missingHours < TimeSpan.Zero) 
             missingHours = TimeSpan.Zero;
 
-        return rawAllowedHours > missingHours ? missingHours : rawAllowedHours;
+        return rawAllowedHours <= missingHours ? rawAllowedHours : missingHours ;
     }
 
 	public TimeSpan CalculateWorkedHours(IEnumerable<TimeRecord> dailyRecords)
