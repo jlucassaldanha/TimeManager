@@ -1,3 +1,3 @@
 namespace TimeManager.Application.DTOs;
 
-public record PeriodSummaryRequest(Guid UserId, DateTime StartDate, DateTime EndDate);
+public record PeriodSummaryRequest(DateTime StartDate, DateTime EndDate);

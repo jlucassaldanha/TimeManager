@@ -1,4 +1,5 @@
 using TimeManager.Application.DTOs;
+using TimeManager.Application.Interfaces;
 using TimeManager.Domain.Interfaces;
 using TimeManager.Domain.Services;
 
@@ -7,10 +8,13 @@ namespace TimeManager.Application.UseCases;
 public class GetAllowanceEligibilityUseCase(
 	IWorkJourneyRuleRepository ruleRepository,
 	ITimeRecordRepository recordRepository,
-	DailyHoursCalculator calculator)
+	DailyHoursCalculator calculator,
+	ICurrentUserService userService)
 {
-	public async Task<List<AllowanceEligibilityDayDto>> ExecuteAsync(Guid userId, int year, int month)
+	public async Task<List<AllowanceEligibilityDayDto>> ExecuteAsync(int year, int month)
 	{
+		var userId = userService.GetUserId();
+
 		var result = new List<AllowanceEligibilityDayDto>();
 
 		var rule = await ruleRepository.GetByUserIdAsync(userId);

@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TimeManager.Domain.Entities;
 using TimeManager.Infrastructure.Data.Converters;
+using TimeManager.Infrastructure.Identity;
 
 namespace TimeManager.Infrastructure.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options)
 {
 	public DbSet<User> Users { get; set; }
     public DbSet<TimeRecord> TimeRecords { get; set; }

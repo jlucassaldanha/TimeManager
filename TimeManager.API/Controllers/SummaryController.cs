@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeManager.Application.DTOs;
 using TimeManager.Application.UseCases;
@@ -6,16 +7,17 @@ namespace TimeManager.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class SummaryController(GetDailySummaryUseCase dailyUseCase, GetPeriodSummaryUseCase periodUseCase) : ControllerBase
 {
 	[HttpGet("daily")]
-	public async Task<IActionResult> GetDailySummary([FromQuery] Guid userId, [FromQuery] DateTime date)
+	public async Task<IActionResult> GetDailySummary([FromQuery] DateTime date)
 	{
 		try
 		{
 			var utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
 
-			var summary = await dailyUseCase.ExecuteAsync(userId, utcDate);
+			var summary = await dailyUseCase.ExecuteAsync(utcDate);
 
 			if (summary == null)
 				return NotFound(new { Message = "Nenhum registro encontrado"});

@@ -1,13 +1,16 @@
+using TimeManager.Application.Interfaces;
 using TimeManager.Domain.Entities;
 using TimeManager.Domain.Interfaces;
 
 namespace TimeManager.Application.UseCases;
 
-public class DeletePunchUseCase(ITimeRecordRepository repository)
+public class DeletePunchUseCase(ITimeRecordRepository repository, ICurrentUserService userService)
 {
 	public async Task ExecuteAsync(Guid recordId, string justification)
 	{
-		var existingRecord = await repository.GetByIdAsync(recordId);
+		var userId = userService.GetUserId();
+
+		var existingRecord = await repository.GetByIdAndUserIdAsync(recordId, userId);
 
 		if (existingRecord == null)
             throw new InvalidOperationException("Registro de ponto não encontrado.");

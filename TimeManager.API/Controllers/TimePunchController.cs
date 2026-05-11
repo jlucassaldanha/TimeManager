@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeManager.Application.DTOs;
 using TimeManager.Application.UseCases;
@@ -6,6 +7,7 @@ namespace TimeManager.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class TimePunchController(
 	RegisterRealTimePunchUseCase realTimeUseCase,
 	RegisterManualPunchUseCase manualUseCase,
@@ -13,11 +15,11 @@ public class TimePunchController(
 	DeletePunchUseCase deleteUseCase) : ControllerBase
 {
 	[HttpPost("realtime")]
-	public async Task<IActionResult> RegisterRealTimePunch([FromBody] Guid userId)
+	public async Task<IActionResult> RegisterRealTimePunch()
 	{
 		try
 		{
-			await realTimeUseCase.ExecuteAsync(userId);
+			await realTimeUseCase.ExecuteAsync();
 			return Ok(new { Message = "Ponto registrado com sucesso."});
 		}
 		catch (ArgumentException ex)
@@ -31,7 +33,7 @@ public class TimePunchController(
 	{
 		try
 		{
-			await manualUseCase.ExecuteAsync(request.UserId, request.DateTime, request.Type, request.Note);
+			await manualUseCase.ExecuteAsync(request);
 			return Ok(new { Message = "Ponto registrado com sucesso."});
 		}
 		catch (ArgumentException ex)
@@ -49,7 +51,7 @@ public class TimePunchController(
 	{
 		try
 		{
-			await updateUseCase.ExecuteAsync(request.UserId, request.RecordId, request.DateTime, request.Type, request.Note);
+			await updateUseCase.ExecuteAsync(request);
 			return Ok(new { Message = "Ponto atualizado com sucesso."});
 		}
 		catch (ArgumentException ex)

@@ -33,10 +33,10 @@ public class TimeRecordRepository(AppDbContext context) : ITimeRecordRepository
             .ToListAsync();
     }
 
-	public async Task<TimeRecord?> GetByIdAsync(Guid id)
+	public async Task<TimeRecord?> GetByIdAndUserIdAsync(Guid id, Guid userId)
 	{
 		return await context.TimeRecords
-			.Where(r => r.Id == id && !r.IsDeleted)
+			.Where(r => r.Id == id && !r.IsDeleted && r.UserId == userId)
 			.FirstOrDefaultAsync();
 	}
 

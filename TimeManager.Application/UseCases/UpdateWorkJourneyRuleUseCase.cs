@@ -1,12 +1,14 @@
+using TimeManager.Application.Interfaces;
 using TimeManager.Domain.Interfaces;
 
 namespace TimeManager.Application.UseCases;
 
-public class UpdateWorkJourneyRuleUseCase(IWorkJourneyRuleRepository repository)
+public class UpdateWorkJourneyRuleUseCase(IWorkJourneyRuleRepository repository, ICurrentUserService userService)
 {
-	public async Task ExecuteAsync(Guid userId, Dictionary<DayOfWeek, TimeSpan> goals)
+	public async Task ExecuteAsync(Dictionary<DayOfWeek, TimeSpan> goals)
 	{
-
+		var userId = userService.GetUserId();
+		
 		var existingRule = await repository.GetByUserIdAsync(userId);
 
 		if (existingRule == null)

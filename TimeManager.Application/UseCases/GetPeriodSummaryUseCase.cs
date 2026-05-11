@@ -1,4 +1,5 @@
 using TimeManager.Application.DTOs;
+using TimeManager.Application.Interfaces;
 using TimeManager.Domain.Interfaces;
 using TimeManager.Domain.Services;
 
@@ -6,10 +7,13 @@ public class GetPeriodSummaryUseCase(
 	ITimeRecordRepository recordRepository, 
 	ITimeAllowanceRepository allowanceRepository,
 	IWorkJourneyRuleRepository ruleRepository,
-	DailyHoursCalculator calculator)
+	DailyHoursCalculator calculator,
+	ICurrentUserService userService)
 {
     public async Task<PeriodSummaryDto?> ExecuteAsync(PeriodSummaryRequest request)
     {
+		var userId = userService.GetUserId();
+
 		var startDateOnly = DateOnly.FromDateTime(request.StartDate);
 		var endDateOnly = DateOnly.FromDateTime(request.EndDate);
 	
@@ -24,10 +28,10 @@ public class GetPeriodSummaryUseCase(
             throw new ArgumentException("O período máximo permitido para consulta é de 31 dias.");
         }
 
-		var journeyRule = await ruleRepository.GetByUserIdAsync(request.UserId);
+		var journeyRule = await ruleRepository.GetByUserIdAsync(userId);
 
-		var allRecords = await recordRepository.GetByUserIdAndPeriodAsync(request.UserId, request.StartDate, request.EndDate);
-		var allAllowances = await allowanceRepository.GetByUserIdAndPeriodAsync(request.UserId, startDateOnly, endDateOnly);
+		var allRecords = await recordRepository.GetByUserIdAndPeriodAsync(userId, request.StartDate, request.EndDate);
+		var allAllowances = await allowanceRepository.GetByUserIdAndPeriodAsync(userId, startDateOnly, endDateOnly);
 
 		if (!allRecords.Any() && !allAllowances.Any()) return null;
 

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeManager.Application.DTOs;
 using TimeManager.Application.UseCases;
@@ -6,6 +7,7 @@ namespace TimeManager.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class AllowanceController(
 	CreateAllowanceUseCase createUseCase,
 	GetAllowanceEligibilityUseCase getEligibilityUseCase) : ControllerBase
@@ -15,7 +17,7 @@ public class AllowanceController(
 	{
 		try
 		{
-			await createUseCase.ExecuteAsync(request.UserId, request.Date, request.Duration, request.Justification);
+			await createUseCase.ExecuteAsync(request);
 			return Ok(new { Message = "Ponto registrado com sucesso."});
 		}
 		catch (ArgumentException ex)
@@ -23,11 +25,11 @@ public class AllowanceController(
 			return BadRequest(new { Error = ex.Message });
 		}
 	}
-	// Atualizar
-	[HttpGet("eligibility/{userId}")]
-	public async Task<IActionResult> GetEligibility(Guid userId, [FromQuery] int year, [FromQuery] int month)
+
+	[HttpGet("eligibility")]
+	public async Task<IActionResult> GetEligibility([FromQuery] int year, [FromQuery] int month)
 	{
-		var eligibilityList = await getEligibilityUseCase.ExecuteAsync(userId, year, month);
+		var eligibilityList = await getEligibilityUseCase.ExecuteAsync(year, month);
     	return Ok(eligibilityList);
 	}
 }

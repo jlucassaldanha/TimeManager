@@ -1,4 +1,5 @@
 using TimeManager.Application.DTOs;
+using TimeManager.Application.Interfaces;
 using TimeManager.Domain.Interfaces;
 using TimeManager.Domain.Services;
 
@@ -8,10 +9,13 @@ public class GetDailySummaryUseCase(
         ITimeRecordRepository recordRepository,
         ITimeAllowanceRepository allowanceRepository,
         IWorkJourneyRuleRepository ruleRepository,
-        DailyHoursCalculator calculator)
+        DailyHoursCalculator calculator,
+		ICurrentUserService userService)
 {
-	public async Task<DailySummaryDto?> ExecuteAsync(Guid userId, DateTime date)
+	public async Task<DailySummaryDto?> ExecuteAsync(DateTime date)
 	{
+		var userId = userService.GetUserId();
+
 		var dateOnly = DateOnly.FromDateTime(date);
 
 		var records = await recordRepository.GetRecordsByUserIdAndDateAsync(userId, date);
