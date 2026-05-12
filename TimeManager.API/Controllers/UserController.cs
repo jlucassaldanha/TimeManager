@@ -6,14 +6,28 @@ namespace TimeManager.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserController(CreateUserUseCase useCase) : ControllerBase
+public class UserController(CreateUserUseCase createUseCase, GetUserUseCase getUseCase) : ControllerBase
 {
+	[HttpGet("{email}")]
+	public async Task<IActionResult> GetUser(string email)
+	{	
+		try
+		{
+			var user = await getUseCase.ExecuteAsync(email);
+			return Ok(new { UserId = user.Id, UserName = user.Name });
+		}
+		catch (Exception ex)
+		{
+			return BadRequest(new { Error = ex.Message} );
+		}
+	}
+
 	[HttpPost("create")]
 	public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
 	{	
 		try
 		{
-			var userId = await useCase.ExecuteAsync(request.Name, request.Email);
+			var userId = await createUseCase.ExecuteAsync(request.Name, request.Email);
 			return Ok(new { Message = "Usuário criado!", UserId = userId });
 		}
 		catch (InvalidOperationException ex)
