@@ -3,7 +3,6 @@ namespace TimeManager.Domain.Entities;
 public class WorkJourneyRule
 {
 	public Guid Id { get; private set; }
-	public Guid UserId { get; private set; }
 	public TimeSpan MondayGoal { get; private set; }
     public TimeSpan TuesdayGoal { get; private set; }
     public TimeSpan WednesdayGoal { get; private set; }
@@ -14,12 +13,11 @@ public class WorkJourneyRule
 
 	protected WorkJourneyRule() { }
 
-    public WorkJourneyRule(Guid userId, 
+    public WorkJourneyRule( 
         TimeSpan monday, TimeSpan tuesday, TimeSpan wednesday, 
         TimeSpan thursday, TimeSpan friday, TimeSpan saturday, TimeSpan sunday)
     {
         Id = Guid.NewGuid();
-        UserId = userId;
         MondayGoal = monday;
         TuesdayGoal = tuesday;
         WednesdayGoal = wednesday;

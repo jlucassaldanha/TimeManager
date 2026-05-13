@@ -7,9 +7,9 @@ namespace TimeManager.Infrastructure.Repositories;
 
 public class WorkJourneyRuleRepository(AppDbContext context) : IWorkJourneyRuleRepository
 {
-	public async Task<WorkJourneyRule?> GetByUserIdAsync(Guid userId)
+	public async Task<WorkJourneyRule?> GetAsync()
 	{
-		return await context.WorkJourneyRules.Where(w => w.UserId == userId).FirstOrDefaultAsync();
+		return await context.WorkJourneyRules.FirstOrDefaultAsync();
 	}
 
 	public async Task AddAsync(WorkJourneyRule rule)

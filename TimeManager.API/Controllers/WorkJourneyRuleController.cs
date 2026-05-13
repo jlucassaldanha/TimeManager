@@ -24,7 +24,7 @@ public class WorkJourneyRuleController(
             { DayOfWeek.Sunday, TimeSpan.Parse(request.Sunday) }
 		};
 
-		await createUseCase.ExecuteAsync(request.UserId, goals);
+		await createUseCase.ExecuteAsync(goals);
 		return Ok(new { Message = "Regra de jornada registrada com sucesso"});
 	}
 
@@ -42,7 +42,7 @@ public class WorkJourneyRuleController(
             { DayOfWeek.Sunday, TimeSpan.Parse(request.Sunday) }
 		};
 
-		await updateUseCase.ExecuteAsync(request.UserId, goals);
+		await updateUseCase.ExecuteAsync(goals);
 		return Ok(new { Message = "Regra de jornada registrada com sucesso"});
 	}
 }

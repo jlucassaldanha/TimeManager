@@ -10,13 +10,13 @@ public class GetDailySummaryUseCase(
         IWorkJourneyRuleRepository ruleRepository,
         DailyHoursCalculator calculator)
 {
-	public async Task<DailySummaryDto?> ExecuteAsync(Guid userId, DateTime date)
+	public async Task<DailySummaryDto?> ExecuteAsync(DateTime date)
 	{
 		var dateOnly = DateOnly.FromDateTime(date);
 
-		var records = await recordRepository.GetRecordsByUserIdAndDateAsync(userId, date);
-		var allowances = await allowanceRepository.GetByUserIdAndDateAllowanceAsync(userId, dateOnly);
-		var journeyRule = await ruleRepository.GetByUserIdAsync(userId);
+		var records = await recordRepository.GetRecordsByDateAsync(date);
+		var allowances = await allowanceRepository.GetByDateAllowanceAsync(dateOnly);
+		var journeyRule = await ruleRepository.GetAsync();
 
 		if (!records.Any() && !allowances.Any()) return null;
 

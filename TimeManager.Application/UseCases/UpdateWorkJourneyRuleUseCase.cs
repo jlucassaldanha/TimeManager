@@ -4,10 +4,10 @@ namespace TimeManager.Application.UseCases;
 
 public class UpdateWorkJourneyRuleUseCase(IWorkJourneyRuleRepository repository)
 {
-	public async Task ExecuteAsync(Guid userId, Dictionary<DayOfWeek, TimeSpan> goals)
+	public async Task ExecuteAsync(Dictionary<DayOfWeek, TimeSpan> goals)
 	{
 
-		var existingRule = await repository.GetByUserIdAsync(userId);
+		var existingRule = await repository.GetAsync();
 
 		if (existingRule == null)
             throw new InvalidOperationException("Regra não encontrada.");

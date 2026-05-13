@@ -9,9 +9,9 @@ public class CreateAllowanceUseCase(
 	IWorkJourneyRuleRepository ruleRepository,
 	AllowanceService allowanceService)
 {
-	public async Task ExecuteAsync(Guid userId, DateOnly date, TimeSpan duration, string justification)
+	public async Task ExecuteAsync(DateOnly date, TimeSpan duration, string justification)
 	{
-		var rule = await ruleRepository.GetByUserIdAsync(userId);
+		var rule = await ruleRepository.GetAsync();
 		if (rule == null)
 			throw new InvalidOperationException("O usuario não possui regras.");
 
@@ -19,7 +19,7 @@ public class CreateAllowanceUseCase(
 
 		allowanceService.ValidateAllowanceRequest(duration, dailyGoal);
 
-		var allowance = new TimeAllowance(userId, date, duration, justification);
+		var allowance = new TimeAllowance(date, duration, justification);
 		await allowanceRepository.AddAsync(allowance);
 	}
 }

@@ -13,7 +13,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ITimeRecordRepository, TimeRecordRepository>();
 builder.Services.AddScoped<ITimeAllowanceRepository, TimeAllowanceRepository>();
 builder.Services.AddScoped<IWorkJourneyRuleRepository, WorkJourneyRuleRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<DailyHoursCalculator>();
 builder.Services.AddScoped<AllowanceService>();
@@ -22,14 +21,12 @@ builder.Services.AddScoped<GetDailySummaryUseCase>();
 builder.Services.AddScoped<GetPeriodSummaryUseCase>();
 builder.Services.AddScoped<RegisterRealTimePunchUseCase>();
 builder.Services.AddScoped<RegisterManualPunchUseCase>();
-builder.Services.AddScoped<CreateUserUseCase>();
 builder.Services.AddScoped<CreateWorkJourneyRuleUseCase>();
 builder.Services.AddScoped<UpdatePunchUseCase>();
 builder.Services.AddScoped<UpdateWorkJourneyRuleUseCase>();
 builder.Services.AddScoped<DeletePunchUseCase>();
 builder.Services.AddScoped<GetAllowanceEligibilityUseCase>();
 builder.Services.AddScoped<CreateAllowanceUseCase>();
-builder.Services.AddScoped<GetUserUseCase>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -43,8 +40,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

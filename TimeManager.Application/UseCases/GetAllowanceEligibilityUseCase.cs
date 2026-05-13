@@ -9,11 +9,11 @@ public class GetAllowanceEligibilityUseCase(
 	ITimeRecordRepository recordRepository,
 	DailyHoursCalculator calculator)
 {
-	public async Task<List<AllowanceEligibilityDayDto>> ExecuteAsync(Guid userId, int year, int month)
+	public async Task<List<AllowanceEligibilityDayDto>> ExecuteAsync(int year, int month)
 	{
 		var result = new List<AllowanceEligibilityDayDto>();
 
-		var rule = await ruleRepository.GetByUserIdAsync(userId);
+		var rule = await ruleRepository.GetAsync();
 		if (rule == null) return result;
 
 		var daysInMonth = DateTime.DaysInMonth(year, month);
@@ -23,7 +23,7 @@ public class GetAllowanceEligibilityUseCase(
 			var currentDate = new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
 			var dailyGoal = rule.GetGoalForDate(DateOnly.FromDateTime(currentDate));
 
-			var dayRecords = await recordRepository.GetRecordsByUserIdAndDateAsync(userId, currentDate);
+			var dayRecords = await recordRepository.GetRecordsByDateAsync(currentDate);
 			var totalWorkedHours = calculator.CalculateWorkedHours(dayRecords);
 
 			var dayDto = new AllowanceEligibilityDayDto { Date = currentDate };

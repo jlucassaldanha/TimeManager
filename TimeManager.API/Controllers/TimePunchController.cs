@@ -13,11 +13,11 @@ public class TimePunchController(
 	DeletePunchUseCase deleteUseCase) : ControllerBase
 {
 	[HttpPost("realtime")]
-	public async Task<IActionResult> RegisterRealTimePunch([FromBody] Guid userId)
+	public async Task<IActionResult> RegisterRealTimePunch()
 	{
 		try
 		{
-			await realTimeUseCase.ExecuteAsync(userId);
+			await realTimeUseCase.ExecuteAsync();
 			return Ok(new { Message = "Ponto registrado com sucesso."});
 		}
 		catch (ArgumentException ex)
@@ -31,7 +31,7 @@ public class TimePunchController(
 	{
 		try
 		{
-			await manualUseCase.ExecuteAsync(request.UserId, request.DateTime, request.Type, request.Note);
+			await manualUseCase.ExecuteAsync(request.DateTime, request.Type, request.Note);
 			return Ok(new { Message = "Ponto registrado com sucesso."});
 		}
 		catch (ArgumentException ex)
@@ -49,7 +49,7 @@ public class TimePunchController(
 	{
 		try
 		{
-			await updateUseCase.ExecuteAsync(request.UserId, request.RecordId, request.DateTime, request.Type, request.Note);
+			await updateUseCase.ExecuteAsync(request.RecordId, request.DateTime, request.Type, request.Note);
 			return Ok(new { Message = "Ponto atualizado com sucesso."});
 		}
 		catch (ArgumentException ex)

@@ -3,7 +3,6 @@ namespace TimeManager.Domain.Entities;
 public class TimeAllowance
 {
 	public Guid Id { get; private set; }
-    public Guid UserId { get; private set; }
     public DateOnly Date { get; private set; }
 	public TimeSpan HoursAllowed { get; private set; }
     public string Justification { get; private set; }
@@ -15,17 +14,14 @@ public class TimeAllowance
 	{
 		Justification = null!;
 	}
-	public TimeAllowance(Guid userId, DateOnly date, TimeSpan hoursAllowed, string justification)
+	public TimeAllowance(DateOnly date, TimeSpan hoursAllowed, string justification)
 	{
-		if (userId == Guid.Empty) 
-			throw new ArgumentException("User required");
-        if (hoursAllowed.TotalMinutes <= 0) 
+		if (hoursAllowed.TotalMinutes <= 0) 
 			throw new ArgumentException("Hours Allowed must be greater than zero");
         if (string.IsNullOrWhiteSpace(justification)) 
 			throw new ArgumentException("Justification is required");
 
 		Id = Guid.NewGuid();
-        UserId = userId;
         Date = date; 
         HoursAllowed = hoursAllowed;
         Justification = justification;

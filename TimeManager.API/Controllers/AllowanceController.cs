@@ -15,7 +15,7 @@ public class AllowanceController(
 	{
 		try
 		{
-			await createUseCase.ExecuteAsync(request.UserId, request.Date, request.Duration, request.Justification);
+			await createUseCase.ExecuteAsync(request.Date, request.Duration, request.Justification);
 			return Ok(new { Message = "Ponto registrado com sucesso."});
 		}
 		catch (ArgumentException ex)
@@ -24,10 +24,10 @@ public class AllowanceController(
 		}
 	}
 	// Atualizar
-	[HttpGet("eligibility/{userId}")]
-	public async Task<IActionResult> GetEligibility(Guid userId, [FromQuery] int year, [FromQuery] int month)
+	[HttpGet("eligibility")]
+	public async Task<IActionResult> GetEligibility([FromQuery] int year, [FromQuery] int month)
 	{
-		var eligibilityList = await getEligibilityUseCase.ExecuteAsync(userId, year, month);
+		var eligibilityList = await getEligibilityUseCase.ExecuteAsync(year, month);
     	return Ok(eligibilityList);
 	}
 }

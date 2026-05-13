@@ -24,10 +24,10 @@ public class GetPeriodSummaryUseCase(
             throw new ArgumentException("O período máximo permitido para consulta é de 31 dias.");
         }
 
-		var journeyRule = await ruleRepository.GetByUserIdAsync(request.UserId);
+		var journeyRule = await ruleRepository.GetAsync();
 
-		var allRecords = await recordRepository.GetByUserIdAndPeriodAsync(request.UserId, request.StartDate, request.EndDate);
-		var allAllowances = await allowanceRepository.GetByUserIdAndPeriodAsync(request.UserId, startDateOnly, endDateOnly);
+		var allRecords = await recordRepository.GetByPeriodAsync(request.StartDate, request.EndDate);
+		var allAllowances = await allowanceRepository.GetByPeriodAsync(startDateOnly, endDateOnly);
 
 		if (!allRecords.Any() && !allAllowances.Any()) return null;
 

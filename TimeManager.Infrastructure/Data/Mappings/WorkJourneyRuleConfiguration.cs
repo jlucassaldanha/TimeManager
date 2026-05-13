@@ -12,13 +12,5 @@ public class WorkJourneyRuleConfiguration : IEntityTypeConfiguration<WorkJourney
 		builder.ToTable("WorkJourneyRules");
 
 		builder.HasKey(w => w.Id);
-
-		builder.HasOne<User>()
-			.WithMany()
-			.HasForeignKey(w => w.UserId)
-			.OnDelete(DeleteBehavior.Cascade);
-
-		builder.HasIndex(w => w.UserId)
-			.IsUnique();
 	}
 }
