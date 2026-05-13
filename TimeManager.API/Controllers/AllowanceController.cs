@@ -5,7 +5,7 @@ using TimeManager.Application.UseCases;
 namespace TimeManager.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/allowance")]
 public class AllowanceController(
 	CreateAllowanceUseCase createUseCase,
 	GetAllowanceEligibilityUseCase getEligibilityUseCase) : ControllerBase

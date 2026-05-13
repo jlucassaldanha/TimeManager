@@ -5,7 +5,7 @@ using TimeManager.Application.UseCases;
 namespace TimeManager.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/timepunch")]
 public class TimePunchController(
 	RegisterRealTimePunchUseCase realTimeUseCase,
 	RegisterManualPunchUseCase manualUseCase,
@@ -59,11 +59,11 @@ public class TimePunchController(
 	}
 
 	[HttpPost("delete")]
-	public async Task<IActionResult> DeletePunch([FromBody] Guid punchId, string justification)
+	public async Task<IActionResult> DeletePunch([FromBody] DeletePunchRequest request)
 	{
 		try
 		{
-			await deleteUseCase.ExecuteAsync(punchId, justification);
+			await deleteUseCase.ExecuteAsync(request.PunchId, request.Justification);
 			return Ok(new { Message = "Ponto deletado com sucesso."});
 		}
 		catch (ArgumentException ex)

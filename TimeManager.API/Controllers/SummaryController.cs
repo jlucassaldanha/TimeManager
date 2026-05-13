@@ -5,7 +5,7 @@ using TimeManager.Application.UseCases;
 namespace TimeManager.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/summary")]
 public class SummaryController(GetDailySummaryUseCase dailyUseCase, GetPeriodSummaryUseCase periodUseCase) : ControllerBase
 {
 	[HttpGet("daily")]

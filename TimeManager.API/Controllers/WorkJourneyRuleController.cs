@@ -5,7 +5,7 @@ using TimeManager.Application.UseCases;
 namespace TimeManager.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/workjourneyrule")]
 public class WorkJourneyRuleController(
 	CreateWorkJourneyRuleUseCase createUseCase,
 	UpdateWorkJourneyRuleUseCase updateUseCase) : ControllerBase
