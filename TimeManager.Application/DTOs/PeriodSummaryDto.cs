@@ -3,10 +3,10 @@ namespace TimeManager.Application.DTOs;
 public record PeriodSummaryDto(
 	DateOnly StartDate,
 	DateOnly EndDate,
-	TimeSpan TotalAllowedHours,
-	TimeSpan TotalWorkedHours,
-	TimeSpan TotalHours,
-	TimeSpan Goal,
-	TimeSpan Balance,
+	int TotalAllowedMinutes,
+	int TotalWorkedMinutes,
+	int TotalMinutes,
+	int GoalMinutes,
+	int BalanceMinutes,
 	IReadOnlyCollection<DailySummaryDto> Days
 );

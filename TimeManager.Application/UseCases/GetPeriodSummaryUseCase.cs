@@ -71,11 +71,11 @@ public class GetPeriodSummaryUseCase(
 
 			dailySummaries.Add(new DailySummaryDto(
 				Date: currentDate,
-				WorkedHours: workedHours,
-				AllowedHours: allowedHours,
-				TotalHours: totalAccountedHours,
-				DailyGoal: dailyGoal,
-				Balance: balancePostTolerance,
+				WorkedMinutes: (int)workedHours.TotalMinutes,
+				AllowedMinutes: (int)allowedHours.TotalMinutes,
+				TotalMinutes: (int)totalAccountedHours.TotalMinutes,
+				DailyGoalMinutes: (int)dailyGoal.TotalMinutes,
+				BalanceMinutes: (int)balancePostTolerance.TotalMinutes,
 				Punches: punches
 			));
 
@@ -91,11 +91,11 @@ public class GetPeriodSummaryUseCase(
         return new PeriodSummaryDto(
 			StartDate: startDateOnly,
 			EndDate: endDateOnly,
-			TotalAllowedHours: totalAllowedHours,
-			TotalWorkedHours: totalWorkedHours,
-			TotalHours: totalHours,
-			Goal: goal,
-			Balance: totalBalance,
+			TotalAllowedMinutes: (int)totalAllowedHours.TotalMinutes,
+			TotalWorkedMinutes: (int)totalWorkedHours.TotalMinutes,
+			TotalMinutes: (int)totalHours.TotalMinutes,
+			GoalMinutes: (int)goal.TotalMinutes,
+			BalanceMinutes: (int)totalBalance.TotalMinutes,
 			dailySummaries
 		);
     }

@@ -40,11 +40,11 @@ public class GetDailySummaryUseCase(
 
 		return new DailySummaryDto(
 			Date: dateOnly,
-			WorkedHours: workedHours,
-			AllowedHours: allowedHours,
-			TotalHours: totalAccountedHours,
-			DailyGoal: dailyGoal,
-			Balance: balancePostTolerance,
+			WorkedMinutes: (int)workedHours.TotalMinutes,
+			AllowedMinutes: (int)allowedHours.TotalMinutes,
+			TotalMinutes: (int)totalAccountedHours.TotalMinutes,
+			DailyGoalMinutes: (int)dailyGoal.TotalMinutes,
+			BalanceMinutes: (int)balancePostTolerance.TotalMinutes,
 			Punches: punches
 		);
 	}
