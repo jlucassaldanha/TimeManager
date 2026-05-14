@@ -30,6 +30,7 @@ public class GetDailySummaryUseCase(
 		
 		var totalAccountedHours = workedHours + allowedHours;
 		var balance = journeyRule.CalculateBalance(dateOnly, totalAccountedHours);
+		var balancePostTolerance = calculator.GetBalancePostTolerance(balance);
 
 		var punches = records.Select(r => new TimePunchDto(
 			Id: r.Id,
@@ -43,7 +44,7 @@ public class GetDailySummaryUseCase(
 			AllowedHours: allowedHours,
 			TotalHours: totalAccountedHours,
 			DailyGoal: dailyGoal,
-			Balance: balance,
+			Balance: balancePostTolerance,
 			Punches: punches
 		);
 	}

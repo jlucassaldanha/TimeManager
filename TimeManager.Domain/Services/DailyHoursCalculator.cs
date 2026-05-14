@@ -4,6 +4,7 @@ namespace TimeManager.Domain.Services;
 
 public class DailyHoursCalculator
 {
+	private readonly TimeSpan DailyTolerance = new(0, 0, 5, 0);
 	public TimeSpan CalculateEffectiveAllowedHours(TimeSpan workedHours, TimeSpan dailyGoal, IEnumerable<TimeAllowance> allowances)
     {
         var rawAllowedHours = TimeSpan.Zero;
@@ -44,5 +45,13 @@ public class DailyHoursCalculator
 		}
 
 		return totalWorked;		
+	}
+
+	public TimeSpan GetBalancePostTolerance(TimeSpan balance)
+	{	
+		if (balance.Duration() <= DailyTolerance)
+			return TimeSpan.Zero;
+
+		return balance;
 	}
 }
