@@ -63,7 +63,7 @@ public class TimePunchController(
 	{
 		try
 		{
-			await deleteUseCase.ExecuteAsync(request.PunchId, request.Justification);
+			await deleteUseCase.ExecuteAsync(request.RecordId, request.Justification);
 			return Ok(new { Message = "Ponto deletado com sucesso."});
 		}
 		catch (ArgumentException ex)

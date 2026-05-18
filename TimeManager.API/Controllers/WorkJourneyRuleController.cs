@@ -7,9 +7,18 @@ namespace TimeManager.API.Controllers;
 [ApiController]
 [Route("api/workjourneyrule")]
 public class WorkJourneyRuleController(
+	GetWorkJourneyRuleUseCase getUseCase,
 	CreateWorkJourneyRuleUseCase createUseCase,
 	UpdateWorkJourneyRuleUseCase updateUseCase) : ControllerBase
 {
+	[HttpGet]
+	public async Task<IActionResult> Get()
+	{
+		var goals = await getUseCase.ExecuteAsync();
+
+		return Ok(goals);
+	}
+
     [HttpPost("create")]
 	public async Task<IActionResult> Create([FromBody] CreateOrUpdateWorkJourneyRuleRequest request)
 	{
