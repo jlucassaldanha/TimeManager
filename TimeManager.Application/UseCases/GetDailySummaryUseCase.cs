@@ -15,7 +15,7 @@ public class GetDailySummaryUseCase(
 		var dateOnly = DateOnly.FromDateTime(date);
 
 		var records = await recordRepository.GetRecordsByDateAsync(date);
-		var allowances = await allowanceRepository.GetByDateAllowanceAsync(dateOnly);
+		var allowances = await allowanceRepository.GetByDateAllowancesAsync(dateOnly);
 		var journeyRule = await ruleRepository.GetAsync();
 
 		if (!records.Any() && !allowances.Any()) return null;

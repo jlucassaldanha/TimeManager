@@ -7,13 +7,19 @@ namespace TimeManager.Infrastructure.Repositories;
 
 public class TimeAllowanceRepository(AppDbContext context) : ITimeAllowanceRepository
 {
-    public async Task<IEnumerable<TimeAllowance>> GetByDateAllowanceAsync(DateOnly date)
+    public async Task<TimeAllowance?> GetByDateAllowanceAsync(DateOnly date)
+    {
+        return await context.TimeAllowances
+            .Where(a => !a.IsDeleted && a.Date == date)
+            .FirstOrDefaultAsync();
+    }
+    public async Task<IEnumerable<TimeAllowance>> GetByDateAllowancesAsync(DateOnly date)
     {
         return await context.TimeAllowances
             .Where(a => !a.IsDeleted && a.Date == date)
             .ToListAsync();
     }
-
+    
     public async Task<IEnumerable<TimeAllowance>> GetByPeriodAsync(DateOnly startDate, DateOnly endDate)
     {
         return await context.TimeAllowances
@@ -22,6 +28,13 @@ public class TimeAllowanceRepository(AppDbContext context) : ITimeAllowanceRepos
             .OrderBy(a => a.Date)
             .ToListAsync();
     }
+
+    public async Task<TimeAllowance?> GetByIdAsync(Guid id)
+	{
+		return await context.TimeAllowances
+			.Where(a => a.Id == id && !a.IsDeleted)
+			.FirstOrDefaultAsync();
+	}
     
     public async Task AddAsync(TimeAllowance allowance)
     {
