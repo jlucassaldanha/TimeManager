@@ -66,7 +66,8 @@ public class GetPeriodSummaryUseCase(
 			var punches = recordsForDay.Select(r => new TimePunchDto(
 				Id: r.Id,
 				Timestamp: r.Timestamp,
-				Type: r.Type.ToString()
+				Type: r.Type.ToString(),
+				Note: r.Note
 			)).ToList();
 
 			dailySummaries.Add(new DailySummaryDto(
