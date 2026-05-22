@@ -24,9 +24,11 @@ public class TimeRecordRepository(AppDbContext context) : ITimeRecordRepository
 
 	public async Task<IEnumerable<TimeRecord>> GetByPeriodAsync(DateTime startDate, DateTime endDate)
     {
+		var realEndDate = endDate.AddDays(1);
+		
         return await context.TimeRecords
             .Where(a => a.Timestamp >= startDate 
-                    && a.Timestamp <= endDate)
+                    && a.Timestamp < endDate)
             .OrderBy(a => a.Timestamp)
             .ToListAsync();
     }
