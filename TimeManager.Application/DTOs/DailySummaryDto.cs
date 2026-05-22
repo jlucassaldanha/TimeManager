@@ -7,5 +7,6 @@ public record DailySummaryDto(
 	int TotalMinutes,
 	int DailyGoalMinutes,
 	int BalanceMinutes,
+	IReadOnlyCollection<AllowanceDto> AllowanceDetails,
 	IReadOnlyCollection<TimePunchDto> Punches
 );

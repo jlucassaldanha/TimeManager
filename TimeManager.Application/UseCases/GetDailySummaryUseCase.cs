@@ -32,6 +32,13 @@ public class GetDailySummaryUseCase(
 		var balance = journeyRule.CalculateBalance(dateOnly, totalAccountedHours);
 		var balancePostTolerance = calculator.GetBalancePostTolerance(balance);
 
+		var allowanceDetails = allowances.Select(a => new AllowanceDto(
+				Id: a.Id,
+				Date: a.Date,
+				Duration: a.HoursAllowed.ToString(@"hh\:mm"),
+				Justification: a.Justification 
+			)).ToList();
+
 		var punches = records.Select(r => new TimePunchDto(
 			Id: r.Id,
 			Timestamp: r.Timestamp,
@@ -46,6 +53,7 @@ public class GetDailySummaryUseCase(
 			TotalMinutes: (int)totalAccountedHours.TotalMinutes,
 			DailyGoalMinutes: (int)dailyGoal.TotalMinutes,
 			BalanceMinutes: (int)balancePostTolerance.TotalMinutes,
+			AllowanceDetails: allowanceDetails,
 			Punches: punches
 		);
 	}
