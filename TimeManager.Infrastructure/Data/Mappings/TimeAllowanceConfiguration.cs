@@ -12,6 +12,9 @@ public class TimeAllowanceConfiguration : IEntityTypeConfiguration<TimeAllowance
 
 		builder.HasKey(t => t.Id);
 
+		builder.Property(t => t.UserId)
+            .IsRequired();
+
 		builder.Property(t => t.Justification)
 			.IsRequired()
 			.HasMaxLength(500);
@@ -20,5 +23,7 @@ public class TimeAllowanceConfiguration : IEntityTypeConfiguration<TimeAllowance
 			.HasMaxLength(500);
 
 		builder.HasQueryFilter(t => !t.IsDeleted);
+
+		builder.HasIndex(t => t.UserId);
 	}
 }

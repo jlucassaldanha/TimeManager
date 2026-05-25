@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeManager.Application.DTOs;
 using TimeManager.Application.UseCases;
 
 namespace TimeManager.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/summary")]
 public class SummaryController(GetDailySummaryUseCase dailyUseCase, GetPeriodSummaryUseCase periodUseCase) : ControllerBase

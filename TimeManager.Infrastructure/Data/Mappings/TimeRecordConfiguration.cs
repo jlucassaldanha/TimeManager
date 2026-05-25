@@ -12,6 +12,9 @@ public class TimeRecordConfiguration : IEntityTypeConfiguration<TimeRecord>
 
 		builder.HasKey(t => t.Id);
 
+		builder.Property(t => t.UserId)
+            .IsRequired();
+
 		builder.Property(t => t.Type)
 			.HasConversion<string>()
 			.IsRequired()
@@ -24,5 +27,7 @@ public class TimeRecordConfiguration : IEntityTypeConfiguration<TimeRecord>
 			.HasMaxLength(500);
 
 		builder.HasQueryFilter(t => !t.IsDeleted);
+
+		builder.HasIndex(t => t.UserId);
 	}
 }

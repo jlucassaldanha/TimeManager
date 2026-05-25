@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeManager.Application.DTOs;
 using TimeManager.Application.UseCases;
 
 namespace TimeManager.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/timepunch")]
 public class TimePunchController(

@@ -12,5 +12,10 @@ public class WorkJourneyRuleConfiguration : IEntityTypeConfiguration<WorkJourney
 		builder.ToTable("WorkJourneyRules");
 
 		builder.HasKey(w => w.Id);
+
+		builder.Property(t => t.UserId)
+            .IsRequired();
+
+		builder.HasIndex(t => t.UserId);
 	}
 }

@@ -1,18 +1,56 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using TimeManager.API.Services;
+using TimeManager.Application.Interfaces;
 using TimeManager.Application.UseCases;
 using TimeManager.Domain.Interfaces;
 using TimeManager.Domain.Services;
 using TimeManager.Infrastructure.Data;
 using TimeManager.Infrastructure.Repositories;
+using TimeManager.Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var secretKey = builder.Configuration["Jwt:SecretKey"]
+    ?? throw new InvalidOperationException("Jwt:SecretKey não configurado");
+var key = Encoding.ASCII.GetBytes(secretKey);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
+});
 
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<ITimeRecordRepository, TimeRecordRepository>();
 builder.Services.AddScoped<ITimeAllowanceRepository, TimeAllowanceRepository>();
 builder.Services.AddScoped<IWorkJourneyRuleRepository, WorkJourneyRuleRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
+
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
 
 builder.Services.AddScoped<DailyHoursCalculator>();
 builder.Services.AddScoped<AllowanceService>();
@@ -43,6 +81,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
