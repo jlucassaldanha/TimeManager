@@ -70,6 +70,8 @@ builder.Services.AddScoped<GetWorkJourneyRuleUseCase>();
 builder.Services.AddScoped<GetAllowanceUseCase>();
 builder.Services.AddScoped<UpdateAllowanceUseCase>();
 builder.Services.AddScoped<DeleteAllowanceUseCase>();
+builder.Services.AddScoped<RegisterUserUseCase>();
+builder.Services.AddScoped<LoginUseCase>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

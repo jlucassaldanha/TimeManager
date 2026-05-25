@@ -19,8 +19,19 @@ public class AllowanceController(
 	[HttpGet]
 	public async Task<IActionResult> GetAllowanceByDate([FromQuery] DateOnly date)
 	{
-		var allowance = await getAllowanceUseCase.ExecuteAsync(date);
-		return Ok(allowance);
+		try
+		{
+			var allowance = await getAllowanceUseCase.ExecuteAsync(date);
+			return Ok(allowance);
+		}
+		catch (ArgumentException ex)
+		{
+			return BadRequest(new { Error = ex.Message });
+		}
+		catch (InvalidOperationException ex)
+		{
+			return NotFound(new { Error = ex.Message });
+		}
 	}
 
 	[HttpPost("create")]
@@ -35,6 +46,11 @@ public class AllowanceController(
 		{
 			return BadRequest(new { Error = ex.Message });
 		}
+		catch (InvalidOperationException ex)
+		{
+			return NotFound(new { Error = ex.Message });
+		}
+		
 	}
 
 	[HttpPost("update")]
@@ -48,6 +64,10 @@ public class AllowanceController(
 		catch (ArgumentException ex)
 		{
 			return BadRequest(new { Error = ex.Message });
+		}
+		catch (InvalidOperationException ex)
+		{
+			return NotFound(new { Error = ex.Message });
 		}
 	}
 
@@ -63,12 +83,24 @@ public class AllowanceController(
 		{
 			return BadRequest(new { Error = ex.Message });
 		}
+		catch (InvalidOperationException ex)
+		{
+			return NotFound(new { Error = ex.Message });
+		}
 	}
 	
 	[HttpGet("eligibility")]
 	public async Task<IActionResult> GetEligibility([FromQuery] int year, [FromQuery] int month)
 	{
-		var eligibilityList = await getEligibilityUseCase.ExecuteAsync(year, month);
-    	return Ok(eligibilityList);
+		try
+		{
+			var eligibilityList = await getEligibilityUseCase.ExecuteAsync(year, month);
+			return Ok(eligibilityList);
+		}
+		catch (Exception ex)
+		{
+			return BadRequest(new { Error = ex.Message });
+		}
+		
 	}
 }

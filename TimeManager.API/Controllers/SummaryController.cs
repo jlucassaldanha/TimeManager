@@ -24,6 +24,10 @@ public class SummaryController(GetDailySummaryUseCase dailyUseCase, GetPeriodSum
 
 			return Ok(summary);
 		}
+		catch (InvalidOperationException ex)
+		{
+			return BadRequest(new { Error = ex.Message });
+		}
 		catch (Exception ex)
 		{
 			return BadRequest(new { Error = ex.Message });
@@ -44,6 +48,14 @@ public class SummaryController(GetDailySummaryUseCase dailyUseCase, GetPeriodSum
 				return NotFound(new { Message = "Nenhum registro encontrado"});
 
 			return Ok(summary);
+		}
+		catch (InvalidOperationException ex)
+		{
+			return BadRequest(new { Error = ex.Message });
+		}
+		catch (ArgumentException ex)
+		{
+			return BadRequest(new { Error = ex.Message });
 		}
 		catch (Exception ex)
 		{

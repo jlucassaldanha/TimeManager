@@ -26,6 +26,10 @@ public class TimePunchController(
 		{
 			return BadRequest(new { Error = ex.Message });
 		}
+		catch(Exception ex)
+		{
+			return BadRequest(new { message = ex.Message });
+		}
 	}
 
 	[HttpPost("manual")]
@@ -44,6 +48,10 @@ public class TimePunchController(
 		{
 			return BadRequest(new { Error = ex.Message });
 		}
+		catch(Exception ex)
+		{
+			return BadRequest(new { message = ex.Message });
+		}
 	}
 
 	[HttpPost("update")]
@@ -58,6 +66,10 @@ public class TimePunchController(
 		{
 			return BadRequest(new { Error = ex.Message });
 		}
+		catch(Exception ex)
+		{
+			return BadRequest(new { message = ex.Message });
+		}
 	}
 
 	[HttpPost("delete")]
@@ -71,6 +83,10 @@ public class TimePunchController(
 		catch (ArgumentException ex)
 		{
 			return BadRequest(new { Error = ex.Message });
+		}
+		catch(Exception ex)
+		{
+			return BadRequest(new { message = ex.Message });
 		}
 	}
 }
