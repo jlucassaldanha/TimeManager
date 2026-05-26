@@ -2,10 +2,11 @@ namespace TimeManager.Application.DTOs;
 
 public record DailySummaryDto(
 	DateOnly Date,
-	TimeSpan WorkedHours,
-	TimeSpan AllowedHours,
-	TimeSpan TotalHours,
-	TimeSpan DailyGoal,
-	TimeSpan Balance,
+	int WorkedMinutes,
+	int AllowedMinutes,
+	int TotalMinutes,
+	int DailyGoalMinutes,
+	int BalanceMinutes,
+	IReadOnlyCollection<AllowanceDto> AllowanceDetails,
 	IReadOnlyCollection<TimePunchDto> Punches
 );

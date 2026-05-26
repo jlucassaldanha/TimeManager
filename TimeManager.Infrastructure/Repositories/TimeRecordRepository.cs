@@ -13,22 +13,22 @@ public class TimeRecordRepository(AppDbContext context) : ITimeRecordRepository
 		await context.SaveChangesAsync();
 	}
 
-	public async Task<IEnumerable<TimeRecord>> GetRecordsByUserIdAndDateAsync(Guid userId, DateTime date)
+	public async Task<IEnumerable<TimeRecord>> GetRecordsByDateAsync(DateTime date)
 	{
 		return await context.TimeRecords
-			.Where(r => r.UserId == userId
-					&& r.Timestamp.Date == date.Date
+			.Where(r => r.Timestamp.Date == date.Date
 					&& !r.IsDeleted)
 			.OrderBy(t => t.Timestamp)
 			.ToListAsync();
 	}
 
-	public async Task<IEnumerable<TimeRecord>> GetByUserIdAndPeriodAsync(Guid userId, DateTime startDate, DateTime endDate)
+	public async Task<IEnumerable<TimeRecord>> GetByPeriodAsync(DateTime startDate, DateTime endDate)
     {
+		var realEndDate = endDate.AddDays(1);
+		
         return await context.TimeRecords
-            .Where(a => a.UserId == userId 
-                    && a.Timestamp >= startDate 
-                    && a.Timestamp <= endDate)
+            .Where(a => a.Timestamp >= startDate 
+                    && a.Timestamp < endDate)
             .OrderBy(a => a.Timestamp)
             .ToListAsync();
     }
@@ -46,11 +46,9 @@ public class TimeRecordRepository(AppDbContext context) : ITimeRecordRepository
         await context.SaveChangesAsync();
     }
 
-	public async Task<bool> ExistsPunchAtAsync(Guid userId, DateTime timestamp)
+	public async Task<bool> ExistsPunchAtAsync(DateTime timestamp)
 	{
 		return await context.TimeRecords
-			.AnyAsync(t => t.UserId == userId 
-						&& !t.IsDeleted 
-						&& t.Timestamp == timestamp);
+			.AnyAsync(t => !t.IsDeleted && t.Timestamp == timestamp);
 	}
 }

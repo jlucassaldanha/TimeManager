@@ -1,26 +1,32 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeManager.Application.DTOs;
 using TimeManager.Application.UseCases;
 
 namespace TimeManager.API.Controllers;
 
+[Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/summary")]
 public class SummaryController(GetDailySummaryUseCase dailyUseCase, GetPeriodSummaryUseCase periodUseCase) : ControllerBase
 {
 	[HttpGet("daily")]
-	public async Task<IActionResult> GetDailySummary([FromQuery] Guid userId, [FromQuery] DateTime date)
+	public async Task<IActionResult> GetDailySummary([FromQuery] DateTime date)
 	{
 		try
 		{
 			var utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
 
-			var summary = await dailyUseCase.ExecuteAsync(userId, utcDate);
+			var summary = await dailyUseCase.ExecuteAsync(utcDate);
 
 			if (summary == null)
 				return NotFound(new { Message = "Nenhum registro encontrado"});
 
 			return Ok(summary);
+		}
+		catch (InvalidOperationException ex)
+		{
+			return BadRequest(new { Error = ex.Message });
 		}
 		catch (Exception ex)
 		{
@@ -42,6 +48,14 @@ public class SummaryController(GetDailySummaryUseCase dailyUseCase, GetPeriodSum
 				return NotFound(new { Message = "Nenhum registro encontrado"});
 
 			return Ok(summary);
+		}
+		catch (InvalidOperationException ex)
+		{
+			return BadRequest(new { Error = ex.Message });
+		}
+		catch (ArgumentException ex)
+		{
+			return BadRequest(new { Error = ex.Message });
 		}
 		catch (Exception ex)
 		{

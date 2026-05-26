@@ -3,29 +3,25 @@ namespace TimeManager.Domain.Entities;
 public class User
 {
 	public Guid Id { get; private set; }
-	public string Name { get; private set; }
 	public string Email { get; private set; }
-	public bool IsActive { get; private set; }
+	public string PasswordHash { get; private set; }
+	public DateTime CreatedAt { get; private set; }
 
 	protected User()
+    {
+        Email = null!;
+        PasswordHash = null!;
+    }
+	
+	public User(string email, string passwordHash)
 	{
-		Name = null!;
-		Email = null!;
-	}
-
-	public User(string name, string email)
-	{
-		if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name is required");
-		if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("Email is required");
-
+		if (string.IsNullOrWhiteSpace(email))
+			throw new ArgumentException("Email não pode ser vazio.", nameof(email));
+		
 		Id = Guid.NewGuid();
-		Name = name;
 		Email = email;
-		IsActive = true;
+		PasswordHash = passwordHash;
+		CreatedAt = DateTime.UtcNow;
 	}
 
-	public void Deactivate()
-	{
-		IsActive = false;
-	}
 }

@@ -22,8 +22,8 @@ public class TimeRecord
 	public TimeRecord(Guid userId, DateTime timestamp, RecordType type, string? note)
 	{
 		if (userId == Guid.Empty)
-			throw new ArgumentException("User Id missing.", nameof(userId));
-
+            throw new ArgumentException("UserId is required.");
+			
 		Id = Guid.NewGuid();
 		UserId = userId;
 		Timestamp = timestamp;

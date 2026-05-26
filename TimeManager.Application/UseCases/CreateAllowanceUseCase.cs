@@ -1,3 +1,4 @@
+using TimeManager.Application.Interfaces;
 using TimeManager.Domain.Entities;
 using TimeManager.Domain.Interfaces;
 using TimeManager.Domain.Services;
@@ -7,11 +8,14 @@ namespace TimeManager.Application.UseCases;
 public class CreateAllowanceUseCase(
 	ITimeAllowanceRepository allowanceRepository,
 	IWorkJourneyRuleRepository ruleRepository,
-	AllowanceService allowanceService)
+	AllowanceService allowanceService,
+	ICurrentUserService currentUserService)
 {
-	public async Task ExecuteAsync(Guid userId, DateOnly date, TimeSpan duration, string justification)
+	public async Task ExecuteAsync(DateOnly date, TimeSpan duration, string justification)
 	{
-		var rule = await ruleRepository.GetByUserIdAsync(userId);
+		var userId = currentUserService.UserId;
+
+		var rule = await ruleRepository.GetAsync();
 		if (rule == null)
 			throw new InvalidOperationException("O usuario não possui regras.");
 

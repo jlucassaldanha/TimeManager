@@ -1,13 +1,18 @@
+using TimeManager.Application.Interfaces;
 using TimeManager.Domain.Entities;
 using TimeManager.Domain.Interfaces;
 
 namespace TimeManager.Application.UseCases;
 
-public class RegisterManualPunchUseCase(ITimeRecordRepository repository)
+public class RegisterManualPunchUseCase(
+	ITimeRecordRepository repository,
+	ICurrentUserService currentUserService)
 {
-	public async Task ExecuteAsync(Guid userId, DateTime dateTime, string type, string note)
+	public async Task ExecuteAsync(DateTime dateTime, string type, string note)
 	{
-		var isDuplicate = await repository.ExistsPunchAtAsync(userId, dateTime);
+		var userId = currentUserService.UserId;
+
+		var isDuplicate = await repository.ExistsPunchAtAsync(dateTime);
         if (isDuplicate)
             throw new InvalidOperationException("Já existe um ponto registrado exatamente neste horário.");
 		

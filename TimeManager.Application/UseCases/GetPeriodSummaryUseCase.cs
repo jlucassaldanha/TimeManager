@@ -24,10 +24,10 @@ public class GetPeriodSummaryUseCase(
             throw new ArgumentException("O período máximo permitido para consulta é de 31 dias.");
         }
 
-		var journeyRule = await ruleRepository.GetByUserIdAsync(request.UserId);
+		var journeyRule = await ruleRepository.GetAsync();
 
-		var allRecords = await recordRepository.GetByUserIdAndPeriodAsync(request.UserId, request.StartDate, request.EndDate);
-		var allAllowances = await allowanceRepository.GetByUserIdAndPeriodAsync(request.UserId, startDateOnly, endDateOnly);
+		var allRecords = await recordRepository.GetByPeriodAsync(request.StartDate, request.EndDate);
+		var allAllowances = await allowanceRepository.GetByPeriodAsync(startDateOnly, endDateOnly);
 
 		if (!allRecords.Any() && !allAllowances.Any()) return null;
 
@@ -61,24 +61,34 @@ public class GetPeriodSummaryUseCase(
 			
 			var totalAccountedHours = workedHours + allowedHours;
 			var balance = journeyRule.CalculateBalance(currentDate, totalAccountedHours);
+			var balancePostTolerance = calculator.GetBalancePostTolerance(balance);
+
+			var allowanceDetails = allowancesForDay.Select(a => new AllowanceDto(
+				Id: a.Id,
+				Date: a.Date,
+				Duration: a.HoursAllowed.ToString(@"hh\:mm"),
+				Justification: a.Justification 
+			)).ToList();
 
 			var punches = recordsForDay.Select(r => new TimePunchDto(
 				Id: r.Id,
 				Timestamp: r.Timestamp,
-				Type: r.Type.ToString()
+				Type: r.Type.ToString(),
+				Note: r.Note
 			)).ToList();
 
 			dailySummaries.Add(new DailySummaryDto(
 				Date: currentDate,
-				WorkedHours: workedHours,
-				AllowedHours: allowedHours,
-				TotalHours: totalAccountedHours,
-				DailyGoal: dailyGoal,
-				Balance: balance,
+				WorkedMinutes: (int)workedHours.TotalMinutes,
+				AllowedMinutes: (int)allowedHours.TotalMinutes,
+				TotalMinutes: (int)totalAccountedHours.TotalMinutes,
+				DailyGoalMinutes: (int)dailyGoal.TotalMinutes,
+				BalanceMinutes: (int)balancePostTolerance.TotalMinutes,
+				AllowanceDetails: allowanceDetails,
 				Punches: punches
 			));
 
-			totalBalance += balance;
+			totalBalance += balancePostTolerance;
 			totalHours += totalAccountedHours;
 			totalWorkedHours += workedHours;
 			totalAllowedHours += allowedHours;
@@ -90,11 +100,11 @@ public class GetPeriodSummaryUseCase(
         return new PeriodSummaryDto(
 			StartDate: startDateOnly,
 			EndDate: endDateOnly,
-			TotalAllowedHours: totalAllowedHours,
-			TotalWorkedHours: totalWorkedHours,
-			TotalHours: totalHours,
-			Goal: goal,
-			Balance: totalBalance,
+			TotalAllowedMinutes: (int)totalAllowedHours.TotalMinutes,
+			TotalWorkedMinutes: (int)totalWorkedHours.TotalMinutes,
+			TotalMinutes: (int)totalHours.TotalMinutes,
+			GoalMinutes: (int)goal.TotalMinutes,
+			BalanceMinutes: (int)totalBalance.TotalMinutes,
 			dailySummaries
 		);
     }

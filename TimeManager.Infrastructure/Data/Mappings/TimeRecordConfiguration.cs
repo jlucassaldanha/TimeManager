@@ -12,6 +12,9 @@ public class TimeRecordConfiguration : IEntityTypeConfiguration<TimeRecord>
 
 		builder.HasKey(t => t.Id);
 
+		builder.Property(t => t.UserId)
+            .IsRequired();
+
 		builder.Property(t => t.Type)
 			.HasConversion<string>()
 			.IsRequired()
@@ -25,9 +28,6 @@ public class TimeRecordConfiguration : IEntityTypeConfiguration<TimeRecord>
 
 		builder.HasQueryFilter(t => !t.IsDeleted);
 
-		builder.HasOne<User>()
-			.WithMany()
-			.HasForeignKey(t => t.UserId)
-			.OnDelete(DeleteBehavior.Cascade);
+		builder.HasIndex(t => t.UserId);
 	}
 }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using TimeManager.Application.Interfaces;
 
 namespace TimeManager.Infrastructure.Data;
 
@@ -20,6 +21,13 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 		var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 		optionsBuilder.UseNpgsql(connectionString);
 
-		return new AppDbContext(optionsBuilder.Options);
+		ICurrentUserService designTimeUserService = new DesignTimeCurrentUserService();
+
+		return new AppDbContext(optionsBuilder.Options, designTimeUserService);
 	}
+
+	private class DesignTimeCurrentUserService : ICurrentUserService
+    {
+        public Guid UserId => Guid.Empty;
+    }
 }

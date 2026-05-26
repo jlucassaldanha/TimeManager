@@ -10,13 +10,13 @@ public class GetDailySummaryUseCase(
         IWorkJourneyRuleRepository ruleRepository,
         DailyHoursCalculator calculator)
 {
-	public async Task<DailySummaryDto?> ExecuteAsync(Guid userId, DateTime date)
+	public async Task<DailySummaryDto?> ExecuteAsync(DateTime date)
 	{
 		var dateOnly = DateOnly.FromDateTime(date);
 
-		var records = await recordRepository.GetRecordsByUserIdAndDateAsync(userId, date);
-		var allowances = await allowanceRepository.GetByUserIdAndDateAllowanceAsync(userId, dateOnly);
-		var journeyRule = await ruleRepository.GetByUserIdAsync(userId);
+		var records = await recordRepository.GetRecordsByDateAsync(date);
+		var allowances = await allowanceRepository.GetByDateAllowancesAsync(dateOnly);
+		var journeyRule = await ruleRepository.GetAsync();
 
 		if (!records.Any() && !allowances.Any()) return null;
 
@@ -30,20 +30,30 @@ public class GetDailySummaryUseCase(
 		
 		var totalAccountedHours = workedHours + allowedHours;
 		var balance = journeyRule.CalculateBalance(dateOnly, totalAccountedHours);
+		var balancePostTolerance = calculator.GetBalancePostTolerance(balance);
+
+		var allowanceDetails = allowances.Select(a => new AllowanceDto(
+				Id: a.Id,
+				Date: a.Date,
+				Duration: a.HoursAllowed.ToString(@"hh\:mm"),
+				Justification: a.Justification 
+			)).ToList();
 
 		var punches = records.Select(r => new TimePunchDto(
 			Id: r.Id,
 			Timestamp: r.Timestamp,
-			Type: r.Type.ToString()
+			Type: r.Type.ToString(),
+			Note: r.Note
 		)).ToList();
 
 		return new DailySummaryDto(
 			Date: dateOnly,
-			WorkedHours: workedHours,
-			AllowedHours: allowedHours,
-			TotalHours: totalAccountedHours,
-			DailyGoal: dailyGoal,
-			Balance: balance,
+			WorkedMinutes: (int)workedHours.TotalMinutes,
+			AllowedMinutes: (int)allowedHours.TotalMinutes,
+			TotalMinutes: (int)totalAccountedHours.TotalMinutes,
+			DailyGoalMinutes: (int)dailyGoal.TotalMinutes,
+			BalanceMinutes: (int)balancePostTolerance.TotalMinutes,
+			AllowanceDetails: allowanceDetails,
 			Punches: punches
 		);
 	}

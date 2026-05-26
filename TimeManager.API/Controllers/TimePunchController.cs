@@ -1,11 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeManager.Application.DTOs;
 using TimeManager.Application.UseCases;
 
 namespace TimeManager.API.Controllers;
 
+[Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/timepunch")]
 public class TimePunchController(
 	RegisterRealTimePunchUseCase realTimeUseCase,
 	RegisterManualPunchUseCase manualUseCase,
@@ -13,16 +15,20 @@ public class TimePunchController(
 	DeletePunchUseCase deleteUseCase) : ControllerBase
 {
 	[HttpPost("realtime")]
-	public async Task<IActionResult> RegisterRealTimePunch([FromBody] Guid userId)
+	public async Task<IActionResult> RegisterRealTimePunch()
 	{
 		try
 		{
-			await realTimeUseCase.ExecuteAsync(userId);
+			await realTimeUseCase.ExecuteAsync();
 			return Ok(new { Message = "Ponto registrado com sucesso."});
 		}
 		catch (ArgumentException ex)
 		{
 			return BadRequest(new { Error = ex.Message });
+		}
+		catch(Exception ex)
+		{
+			return BadRequest(new { message = ex.Message });
 		}
 	}
 
@@ -31,7 +37,7 @@ public class TimePunchController(
 	{
 		try
 		{
-			await manualUseCase.ExecuteAsync(request.UserId, request.DateTime, request.Type, request.Note);
+			await manualUseCase.ExecuteAsync(request.DateTime, request.Type, request.Note);
 			return Ok(new { Message = "Ponto registrado com sucesso."});
 		}
 		catch (ArgumentException ex)
@@ -42,6 +48,10 @@ public class TimePunchController(
 		{
 			return BadRequest(new { Error = ex.Message });
 		}
+		catch(Exception ex)
+		{
+			return BadRequest(new { message = ex.Message });
+		}
 	}
 
 	[HttpPost("update")]
@@ -49,26 +59,34 @@ public class TimePunchController(
 	{
 		try
 		{
-			await updateUseCase.ExecuteAsync(request.UserId, request.RecordId, request.DateTime, request.Type, request.Note);
+			await updateUseCase.ExecuteAsync(request.RecordId, request.DateTime, request.Type, request.Note);
 			return Ok(new { Message = "Ponto atualizado com sucesso."});
 		}
 		catch (ArgumentException ex)
 		{
 			return BadRequest(new { Error = ex.Message });
 		}
+		catch(Exception ex)
+		{
+			return BadRequest(new { message = ex.Message });
+		}
 	}
 
 	[HttpPost("delete")]
-	public async Task<IActionResult> DeletePunch([FromBody] Guid punchId, string justification)
+	public async Task<IActionResult> DeletePunch([FromBody] DeletePunchRequest request)
 	{
 		try
 		{
-			await deleteUseCase.ExecuteAsync(punchId, justification);
+			await deleteUseCase.ExecuteAsync(request.RecordId, request.Justification);
 			return Ok(new { Message = "Ponto deletado com sucesso."});
 		}
 		catch (ArgumentException ex)
 		{
 			return BadRequest(new { Error = ex.Message });
+		}
+		catch(Exception ex)
+		{
+			return BadRequest(new { message = ex.Message });
 		}
 	}
 }

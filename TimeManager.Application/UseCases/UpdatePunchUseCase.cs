@@ -5,7 +5,7 @@ namespace TimeManager.Application.UseCases;
 
 public class UpdatePunchUseCase(ITimeRecordRepository repository)
 {
-	public async Task ExecuteAsync(Guid userId, Guid recordId, DateTime newDateTime, string newType, string newNote)
+	public async Task ExecuteAsync(Guid recordId, DateTime newDateTime, string newType, string newNote)
 	{
 		var existingRecord = await repository.GetByIdAsync(recordId);
 

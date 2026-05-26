@@ -1,15 +1,20 @@
+using TimeManager.Application.Interfaces;
 using TimeManager.Domain.Entities;
 using TimeManager.Domain.Interfaces;
 
 namespace TimeManager.Application.UseCases;
 
-public class RegisterRealTimePunchUseCase(ITimeRecordRepository repository)
+public class RegisterRealTimePunchUseCase(
+	ITimeRecordRepository repository,
+	ICurrentUserService currentUserService)
 {
-	public async Task ExecuteAsync(Guid userId)
+	public async Task ExecuteAsync()
 	{
+		var userId = currentUserService.UserId;
+
 		var now = DateTime.UtcNow;
 
-		var todayRecords = await repository.GetRecordsByUserIdAndDateAsync(userId, now.Date);
+		var todayRecords = await repository.GetRecordsByDateAsync(now.Date);
 		var lastRecord = todayRecords.LastOrDefault();
 
 		var nextType = (lastRecord == null || lastRecord.Type == RecordType.Exit) 
