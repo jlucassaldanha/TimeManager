@@ -27,7 +27,7 @@ public class JwtTokenGenerator(IConfiguration configuration) : ITokenGenerator
 				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
 				new Claim(ClaimTypes.Email, user.Email)
 			]),
-			Expires = DateTime.UtcNow.AddHours(8),
+			Expires = DateTime.UtcNow.AddDays(7),
 			SigningCredentials = new SigningCredentials(
 				new SymmetricSecurityKey(key),
 				SecurityAlgorithms.HmacSha256Signature
