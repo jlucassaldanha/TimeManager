@@ -33,7 +33,7 @@ public class TimePunchController(
 	}
 
 	[HttpPost("manual")]
-	public async Task<IActionResult> RegisterRealTimePunch([FromBody] ManualPunchRequest request)
+	public async Task<IActionResult> RegisterManualPunch([FromBody] ManualPunchRequest request)
 	{
 		try
 		{
