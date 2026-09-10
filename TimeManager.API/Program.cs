@@ -103,7 +103,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendLocalPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://timemanagerweb.verce.app")
+        policy.WithOrigins("http://localhost:3000", "https://timemanagerweb.vercel.app")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -112,11 +112,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors("FrontendLocalPolicy");
 
